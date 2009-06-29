@@ -9,9 +9,10 @@ class MathtexBackend(object):
         self.fonts_object = None
         self._options = {}
 
-    def set_canvas_size(self, w, h):
+    def set_canvas_size(self, w, h, d):
         self.width = w
         self.height = h
+        self.depth = d
 
     def render(self, glyphs, rects):
         """

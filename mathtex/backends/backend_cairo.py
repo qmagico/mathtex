@@ -3,13 +3,14 @@ Cairo backend for Mathtex.
 
 Requires: cairo, pycairo
 """
+from math import ceil
 
 try:
     import cairo
 except ImportError:
-    raise ImportErorr("Cairo backend requires pycairo.")
+    raise ImportError("Cairo backend requires pycairo.")
 
-from mathtex.backends import MathtexBackend
+from mathtex.backend import MathtexBackend
 
 class MathtexBackendCairo(MathtexBackend):
     """
@@ -21,8 +22,13 @@ class MathtexBackendCairo(MathtexBackend):
         MathtexBackend.__init__(self, dpi)
 
     def render(self, glyphs, rects):
-        self._glyphs = glyphs
-        self._rects = rects
+        # Extract the info Cairo needs to render the equation
+        self._glyphs = [(info.postscript_name, info.fontsize, unichr(info.num),
+                         ox, oy)
+                        for ox, oy, info in glyphs]
+        self._rects = [(x1, y1 - self.height, x2 - x1, y2 - y1)
+                       for x1, y1, x2, y2 in rects]
+        
         self._rendered = True
 
     def get_formats(self):
@@ -41,12 +47,14 @@ class MathtexBackendCairo(MathtexBackend):
         """
         ctx.save()
 
-        for font, fontsize, s, ox, oy in self._glyphs:
+        for name, fontsize, s, ox, oy in self._glyphs:
             ctx.new_path()
             ctx.move_to(ox, oy)
 
             ctx.save()
-            ctx.select_font_face(font.name, font.slant, font.weight)
+            ctx.select_font_face(name.lower(),
+                                 cairo.FONT_SLANT_NORMAL,
+                                 cairo.FONT_WEIGHT_NORMAL)
             size = fontsize * self.dpi / 72.0
             ctx.set_font_size(size)
             ctx.show_text(s.encode("utf-8"))
@@ -66,7 +74,8 @@ class MathtexBackendCairo(MathtexBackend):
 
         if format == 'png':
             surface = cairo.ImageSurface(cairo.FORMAT_ARGB32,
-                                         self.width, self.height)
+                                         int(ceil(self.width)),
+                                         int(ceil(self.height + self.depth)))
 
         ctx = cairo.Context(surface)
         self.render_to_context(ctx)

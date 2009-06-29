@@ -1,10 +1,13 @@
 from mathtex.pyparsing import Combine, Group, Optional, Forward, Literal, \
     OneOrMore, ZeroOrMore, ParseException, Empty, ParseResults, Suppress, \
-    oneOf, StringEnd, ParserFatalException, FollowedBy, Regex, ParserElement
+    oneOf, StringEnd, FollowedBy, Regex, ParserElement
 # Enable packrat parsing
 ParserElement.enablePackrat()
 
 from mathtex.boxmodel import *
+from mathtex.fonts import *
+
+from matplotlib.ft2font import FT2Font
 
 ##############################################################################
 # PARSER
@@ -20,7 +23,7 @@ def Error(msg):
     empty.setParseAction(raise_error)
     return empty
 
-class Parser(object):
+class MathtexParser(object):
     """
     This is the pyparsing-based parser for math expressions.  It
     actually parses full strings *containing* math expressions, in
@@ -304,7 +307,7 @@ class Parser(object):
             self.dpi = dpi
 
         def copy(self):
-            return Parser.State(
+            return MathtexParser.State(
                 self.font_output,
                 self.font,
                 self.font_class,
@@ -356,7 +359,7 @@ class Parser(object):
         hlist = Hlist(symbols)
         # We're going into math now, so set font to 'it'
         self.push_state()
-        self.get_state().font = rcParams['mathtext.default']
+        self.get_state().font =  'it' # rcParams['mathtext.default']
         return [hlist]
 
     def _make_space(self, percentage):

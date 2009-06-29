@@ -1,6 +1,7 @@
-from __future__ import divison
+from __future__ import division
+from numpy import inf, isinf
 
-from mathtex.fonts import Fonts
+from mathtex.fonts import *
 
 ##############################################################################
 # TeX-LIKE BOX MODEL
@@ -172,9 +173,11 @@ class Char(Node):
         """
         Render the character to the canvas
         """
-        self.font_output.render_glyph(
-            x, y,
-            self.font, self.font_class, self.c, self.fontsize, self.dpi)
+        info = self.font_output._get_info(self.font, self.font_class,
+                                          self.c, self.fontsize, self.dpi)
+        return (x - self._metrics.xmin,
+                y + self._metrics.ymin,
+                info)
 
     def shrink(self):
         Node.shrink(self)
@@ -216,9 +219,11 @@ class Accent(Char):
         """
         Render the character to the canvas.
         """
-        self.font_output.render_glyph(
-            x - self._metrics.xmin, y + self._metrics.ymin,
-            self.font, self.font_class, self.c, self.fontsize, self.dpi)
+        info = self.font_output._get_info(self.font, self.font_class,
+                                          self.c, self.fontsize, self.dpi)
+        return (x - self._metrics.xmin,
+                y + self._metrics.ymin,
+                info)
 
 class List(Box):
     """
@@ -478,10 +483,9 @@ class Rule(Box):
     """
     def __init__(self, width, height, depth, state):
         Box.__init__(self, width, height, depth)
-        self.font_output = state.font_output
 
     def render(self, x, y, w, h):
-        self.font_output.render_rect_filled(x, y, x + w, y + h)
+        return (x, y, x + w, y + h)
 
 class Hrule(Rule):
     """
@@ -727,7 +731,13 @@ class Ship(object):
         self.cur_h       = 0.
         self.off_h       = ox
         self.off_v       = oy + box.height
+
+        self.rects = []
+        self.glyphs = []
+        
         self.hlist_out(box)
+
+        return (self.rects, self.glyphs)
 
     @staticmethod
     def clamp(value):
@@ -750,7 +760,8 @@ class Ship(object):
 
         for p in box.children:
             if isinstance(p, Char):
-                p.render(self.cur_h + self.off_h, self.cur_v + self.off_v)
+                self.glyphs.append(p.render(self.cur_h + self.off_h,
+                                            self.cur_v + self.off_v))
                 self.cur_h += p.width
             elif isinstance(p, Kern):
                 self.cur_h += p.width
@@ -779,9 +790,9 @@ class Ship(object):
                     rule_depth = box.depth
                 if rule_height > 0 and rule_width > 0:
                     self.cur_v = baseline + rule_depth
-                    p.render(self.cur_h + self.off_h,
-                             self.cur_v + self.off_v,
-                             rule_width, rule_height)
+                    self.rects.append(p.render(self.cur_h + self.off_h,
+                                               self.cur_v + self.off_v,
+                                               rule_width, rule_height))
                     self.cur_v = baseline
                 self.cur_h += rule_width
             elif isinstance(p, Glue):
@@ -838,9 +849,9 @@ class Ship(object):
                 rule_height += rule_depth
                 if rule_height > 0 and rule_depth > 0:
                     self.cur_v += rule_height
-                    p.render(self.cur_h + self.off_h,
-                             self.cur_v + self.off_v,
-                             rule_width, rule_height)
+                    self.rects.append(p.render(self.cur_h + self.off_h,
+                                               self.cur_v + self.off_v,
+                                               rule_width, rule_height))
             elif isinstance(p, Glue):
                 glue_spec = p.glue_spec
                 rule_height = glue_spec.width - cur_g
