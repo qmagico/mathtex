@@ -1,3 +1,4 @@
+# -*- coding: iso-8859-1 -*-
 from __future__ import division
 from numpy import inf, isinf
 
@@ -734,7 +735,7 @@ class Ship(object):
 
         self.rects = []
         self.glyphs = []
-        
+
         self.hlist_out(box)
 
         return (self.rects, self.glyphs)

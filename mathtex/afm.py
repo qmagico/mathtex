@@ -331,7 +331,7 @@ class AFM:
         """
         if not isord: c=ord(c)
         wx, name, bbox = self._metrics[c]
-        return bbox[-1]
+        return bbox[-1] - bbox[1]
 
     def get_kern_dist(self, c1, c2):
         """
