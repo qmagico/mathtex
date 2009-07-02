@@ -24,7 +24,7 @@ class MathtexBackendCairo(MathtexBackend):
     def render(self, glyphs, rects):
         # Extract the info Cairo needs to render the equation
         self._glyphs = [(info.postscript_name, info.fontsize, unichr(info.num),
-                         ox, oy)
+                         ox, oy - info.offset)
                         for ox, oy, info in glyphs]
         self._rects = [(x1, y1, x2 - x1, y2 - y1)
                        for x1, y1, x2, y2 in rects]
