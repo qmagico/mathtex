@@ -1,8 +1,8 @@
 from mathtex.util import Bunch
-from matplotlib._mathtext_data import latex_to_bakoma, \
+from mathtex.data import latex_to_bakoma, \
         latex_to_standard, tex2uni, latex_to_cmex
 
-from matplotlib.ft2font import FT2Font
+from mathtex.ft2font import FT2Font
 
 class Fonts(object):
     """
@@ -33,7 +33,7 @@ class Fonts(object):
         return [(fontname, sym)]
 
 # Legacy Matplotlib font definitions
-    
+
 class TruetypeFonts(Fonts):
     """
     A generic base class for all font setups that use Truetype fonts
@@ -179,7 +179,7 @@ class BakomaFonts(TruetypeFonts):
 
         if fontname is 'default':
             fontname = 'rm'
-        
+
         if fontname in self.fontmap and sym in latex_to_bakoma:
             basename, num = latex_to_bakoma[sym]
             slanted = (basename == "cmmi10") or sym in self._slanted_symbols
