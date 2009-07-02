@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 from __future__ import division
-from numpy import inf, isinf
+from mathtex.util import inf, isinf
 
 from mathtex.fonts import *
 
