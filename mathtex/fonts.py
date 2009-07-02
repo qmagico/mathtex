@@ -130,7 +130,7 @@ class BakomaFonts(Fonts):
 
     def _get_offset(self, cached_font, glyph, fontsize, dpi):
         if cached_font.get_fontname() == 'cmex10':
-            return (cached_font.get_height_char(glyph,True) * 0.001 * fontsize)/2.0
+            return (cached_font.get_height_char(glyph,True) * 0.001 * fontsize * dpi/72.0)/2.0
         return 0.
 
     def _get_info (self, fontname, font_class, sym, fontsize, dpi):
