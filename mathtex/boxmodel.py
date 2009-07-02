@@ -1,6 +1,5 @@
-# -*- coding: iso-8859-1 -*-
 from __future__ import division
-from mathtex.util import inf, isinf
+from numpy import inf, isinf
 
 from mathtex.fonts import *
 
@@ -735,7 +734,7 @@ class Ship(object):
 
         self.rects = []
         self.glyphs = []
-
+        
         self.hlist_out(box)
 
         return (self.rects, self.glyphs)

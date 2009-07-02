@@ -1,8 +1,3 @@
-inf = float('inf')
-
-def isinf(f):
-    return f == inf
-
 class Bunch:
     """
     Often we want to just collect a bunch of stuff together, naming each
