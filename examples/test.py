@@ -1,14 +1,16 @@
+# -*- coding: iso-8859-1 -*-
 # TODO
 
 from mathtex.parser import MathtexParser
 from mathtex.boxmodel import ship
 from mathtex.fonts import BakomaFonts
 from mathtex.backends.backend_cairo import MathtexBackendCairo
+from mathtex.backends.backend_image import MathtexBackendImage
 
 parser = MathtexParser()
 bakoma = BakomaFonts()
 
-box =  parser.parse("$x$", bakoma, 12, 99.0)
+box =  parser.parse("$\sqrt{x}$", bakoma, 12, 99.0)
 
 print box
 
@@ -16,7 +18,7 @@ rects, glyphs =  ship(0, -box.depth, box)
 
 print glyphs
 
-cairo = MathtexBackendCairo(99.0)
-cairo.set_canvas_size(box.width, box.height, box.depth)
-cairo.render(glyphs, rects)
-cairo.save('test.png', 'png')
+backend = MathtexBackendImage(99.0)
+backend.set_canvas_size(box.width, box.height, box.depth)
+backend.render(glyphs, rects)
+backend.save('test.png', 'png')

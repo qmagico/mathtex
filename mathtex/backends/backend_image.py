@@ -16,8 +16,6 @@ class MathtexBackendImage(MathtexBackend):
 
     def __init__(self, dpi):
         self._rendered = False
-        self.ox = 0
-        self.oy = 0
         self.image = None
         MathtexBackend.__init__(self, dpi)
 

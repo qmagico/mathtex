@@ -206,7 +206,7 @@ void FT2Image::draw_rect_filled(unsigned long x0, unsigned long y0,
   y1 = std::min(y1, _height);
 
   for (size_t j=y0; j<y1+1; j++) {
-    for (size_t i=x0; i<x1+1; i++) {
+    for (size_t i=x0; i<x1; i++) {
       _buffer[i + j*_width] = 255;
     }
   }
