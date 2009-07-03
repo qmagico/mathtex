@@ -3,6 +3,7 @@ from mathtex.data import latex_to_bakoma, \
         latex_to_standard, tex2uni, latex_to_cmex
 
 from mathtex.ft2font import FT2Font
+from mathtex.font_manager import findfont
 
 class Fonts(object):
     """
@@ -167,7 +168,7 @@ class BakomaFonts(TruetypeFonts):
         TruetypeFonts.__init__(self, *args, **kwargs)
         self.fontmap = {}
         for key, val in self._fontmap.iteritems():
-            fullpath = "/usr/share/fonts/texcm-ttf/%s.ttf" % (val)
+            fullpath = findfont(val)
             self.fontmap[key] = fullpath
             self.fontmap[val] = fullpath
 
