@@ -2,7 +2,7 @@ from mathtex.util import Bunch
 from mathtex.data import latex_to_bakoma, \
         latex_to_standard, tex2uni, latex_to_cmex, stix_virtual_fonts
 
-from mathtex.ft2font import FT2Font
+from mathtex.ft2font import FT2Font, KERNING_DEFAULT
 from mathtex.font_manager import findfont, FontProperties
 
 from warnings import warn
@@ -157,7 +157,8 @@ class TruetypeFonts(Fonts):
         pclt = cached_font.font.get_sfnt_table('pclt')
         if pclt is None:
             # Some fonts don't store the xHeight, so we do a poor man's xHeight
-            metrics = self.get_metrics(font, rcParams['mathtext.default'], 'x', fontsize, dpi)
+            #metrics = self.get_metrics(font, rcParams['mathtext.default'], 'x', fontsize, dpi)
+            metrics = self.get_metrics(font, '', 'x', fontsize, dpi)
             return metrics.iceberg
         xHeight = (pclt['xHeight'] / 64.0) * (fontsize / 12.0) * (dpi / 100.0)
         return xHeight

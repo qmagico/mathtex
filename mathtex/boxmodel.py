@@ -175,9 +175,7 @@ class Char(Node):
         """
         info = self.font_output._get_info(self.font, self.font_class,
                                           self.c, self.fontsize, self.dpi)
-        return (x - self._metrics.xmin,
-                y + self._metrics.ymin,
-                info)
+        return (x, y, info)
 
     def shrink(self):
         Node.shrink(self)
@@ -734,7 +732,7 @@ class Ship(object):
 
         self.rects = []
         self.glyphs = []
-        
+
         self.hlist_out(box)
 
         return (self.rects, self.glyphs)
