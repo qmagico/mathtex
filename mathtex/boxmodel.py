@@ -173,9 +173,18 @@ class Char(Node):
         """
         Render the character to the canvas
         """
+        print "Rendering at: %f %f" % (x, y)
         info = self.font_output._get_info(self.font, self.font_class,
                                           self.c, self.fontsize, self.dpi)
         return (x, y, info)
+
+    def bbox(self):
+        info = self.font_output._get_info(self.font, self.font_class,
+        self.c, self.fontsize, self.dpi)
+        return [info.metrics.xmin,
+                info.metrics.ymin,
+                info.metrics.xmax,
+                info.metrics.ymax]
 
     def shrink(self):
         Node.shrink(self)
@@ -485,6 +494,9 @@ class Rule(Box):
     def render(self, x, y, w, h):
         return (x, y, x + w, y + h)
 
+    def bbox(self, x, y, w, h):
+        return [x, y, x + w, y + h]
+
 class Hrule(Rule):
     """
     Convenience class to create a horizontal rule.
@@ -732,10 +744,11 @@ class Ship(object):
 
         self.rects = []
         self.glyphs = []
+        self.bbox = [0, 0, 0, 0]
 
         self.hlist_out(box)
 
-        return (self.rects, self.glyphs)
+        return (self.rects, self.glyphs, self.bbox)
 
     @staticmethod
     def clamp(value):
@@ -744,6 +757,12 @@ class Ship(object):
         if value > 1000000000.:
             return 1000000000.
         return value
+
+    def _update_bbox(self, x1, y1, x2, y2):
+        self.bbox = [min(self.bbox[0], x1),
+                     min(self.bbox[1], y1),
+                     max(self.bbox[2], x2),
+                     max(self.bbox[3], y2)]
 
     def hlist_out(self, box):
         cur_g         = 0
@@ -758,8 +777,11 @@ class Ship(object):
 
         for p in box.children:
             if isinstance(p, Char):
-                self.glyphs.append(p.render(self.cur_h + self.off_h,
-                                            self.cur_v + self.off_v))
+                ox, oy = self.cur_h + self.off_h, self.cur_v + self.off_v
+                bbox = p.bbox()
+                self.glyphs.append(p.render(ox, oy))
+                self._update_bbox(ox + bbox[0], oy - bbox[1],
+                                  ox + bbox[2], oy - bbox[3])
                 self.cur_h += p.width
             elif isinstance(p, Kern):
                 self.cur_h += p.width
@@ -788,9 +810,9 @@ class Ship(object):
                     rule_depth = box.depth
                 if rule_height > 0 and rule_width > 0:
                     self.cur_v = baseline + rule_depth
-                    self.rects.append(p.render(self.cur_h + self.off_h,
-                                               self.cur_v + self.off_v,
-                                               rule_width, rule_height))
+                    ox, oy = self.cur_h + self.off_h, self.cur_v + self.off_v
+                    self.rects.append(p.render(ox, oy, rule_width, rule_height))
+                    self._update_bbox(p.bbox(ox, oy, rule_width, rule_height))
                     self.cur_v = baseline
                 self.cur_h += rule_width
             elif isinstance(p, Glue):
@@ -847,9 +869,10 @@ class Ship(object):
                 rule_height += rule_depth
                 if rule_height > 0 and rule_depth > 0:
                     self.cur_v += rule_height
-                    self.rects.append(p.render(self.cur_h + self.off_h,
-                                               self.cur_v + self.off_v,
-                                               rule_width, rule_height))
+                    ox, oy = self.cur_h + self.off_h, self.cur_v + self.off_v
+                    x1, y1, x2, y2 = p.bbox(ox, oy, rule_width, rule_height)
+                    self.rects.append(p.render(ox, oy, rule_width, rule_height))
+                    self._update_bbox(x1, y1, x2, y2)
             elif isinstance(p, Glue):
                 glue_spec = p.glue_spec
                 rule_height = glue_spec.width - cur_g
