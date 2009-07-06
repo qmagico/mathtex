@@ -1,6 +1,6 @@
 from mathtex.pyparsing import Combine, Group, Optional, Forward, Literal, \
     OneOrMore, ZeroOrMore, ParseException, Empty, ParseResults, Suppress, \
-    oneOf, StringEnd, FollowedBy, Regex, ParserElement
+    oneOf, StringEnd, FollowedBy, Regex, ParserElement, ParseFatalException
 # Enable packrat parsing
 ParserElement.enablePackrat()
 
@@ -690,7 +690,7 @@ class MathtexParser(object):
         # Shift so the fraction line sits in the middle of the
         # equals sign
         metrics = state.font_output.get_metrics(
-            state.font, rcParams['mathtext.default'], '=', state.fontsize, state.dpi)
+            state.font, '', '=', state.fontsize, state.dpi)
         shift = (cden.height -
                  ((metrics.ymax + metrics.ymin) / 2 -
                   thickness * 3.0))

@@ -870,9 +870,10 @@ class Ship(object):
                 if rule_height > 0 and rule_depth > 0:
                     self.cur_v += rule_height
                     ox, oy = self.cur_h + self.off_h, self.cur_v + self.off_v
-                    x1, y1, x2, y2 = p.bbox(ox, oy, rule_width, rule_height)
-                    self.rects.append(p.render(ox, oy, rule_width, rule_height))
-                    self._update_bbox(x1, y1, x2, y2)
+                    rect = p.render(ox, oy, rule_width, rule_height)
+                    if rect is not None:
+                        self.rects.append(rect)
+                        self._update_bbox(ox, oy, ox + rule_width, oy + rule_height)
             elif isinstance(p, Glue):
                 glue_spec = p.glue_spec
                 rule_height = glue_spec.width - cur_g
