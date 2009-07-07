@@ -45,9 +45,9 @@ class MathtexBackendCairo(MathtexBackend):
         'oblique' : cairo.FONT_SLANT_OBLIQUE,
         }
 
-    def __init__(self, dpi):
+    def __init__(self):
         self._rendered = False
-        MathtexBackend.__init__(self, dpi)
+        MathtexBackend.__init__(self)
 
     def render(self, glyphs, rects):
         # Extract the info Cairo needs to render the equation

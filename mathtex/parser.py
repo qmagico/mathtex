@@ -369,7 +369,7 @@ class MathtexParser(object):
         width = self._em_width_cache.get(key)
         if width is None:
             metrics = state.font_output.get_metrics(
-                state.font, rcParams['mathtext.default'], 'm', state.fontsize, state.dpi)
+                state.font, '', 'm', state.fontsize, state.dpi)
             width = metrics.advance
             self._em_width_cache[key] = width
         return Kern(width * percentage)

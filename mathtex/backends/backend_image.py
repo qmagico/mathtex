@@ -14,10 +14,10 @@ class MathtexBackendImage(MathtexBackend):
     A image backend for Mathtex.
     """
 
-    def __init__(self, dpi):
+    def __init__(self):
         self._rendered = False
         self.image = None
-        MathtexBackend.__init__(self, dpi)
+        MathtexBackend.__init__(self)
 
     def get_formats(self):
         return ['png']
@@ -59,3 +59,7 @@ class MathtexBackendImage(MathtexBackend):
                        self.image.get_height(),
                        fh,
                        self.dpi)
+
+    def as_rgba(self):
+        assert self._rendered == True
+        return self.image.as_rgba_str()

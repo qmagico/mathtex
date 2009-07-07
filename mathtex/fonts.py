@@ -196,7 +196,7 @@ class BakomaFonts(TruetypeFonts):
                  }
 
     def __init__(self, *args, **kwargs):
-        #self._stix_fallback = StixFonts(*args, **kwargs)
+        self._stix_fallback = StixFonts(*args, **kwargs)
 
         TruetypeFonts.__init__(self, *args, **kwargs)
         self.fontmap = {}
@@ -237,9 +237,9 @@ class BakomaFonts(TruetypeFonts):
                     symbol_name = cached_font.font.get_glyph_name(
                         cached_font.charmap[num])
 
-        #if symbol_name is None:
-        #    return self._stix_fallback._get_glyph(
-        #        fontname, font_class, sym, fontsize)
+        if symbol_name is None:
+            return self._stix_fallback._get_glyph(
+                fontname, font_class, sym, fontsize)
 
         return cached_font, num, symbol_name, fontsize, slanted
 

@@ -3,16 +3,14 @@ class MathtexBackend(object):
     The base class for all Mathtex backends.
     """
 
-    def __init__(self, dpi):
-        self.dpi = dpi
-        
-        self.fonts_object = None
+    def __init__(self):
         self._options = {}
 
-    def set_canvas_size(self, w, h, d):
+    def set_canvas_size(self, w, h, d, dpi):
         self.width = w
         self.height = h
         self.depth = d
+        self.dpi = dpi
 
     def render(self, glyphs, rects):
         """
@@ -47,9 +45,9 @@ class MathtexBackend(object):
         return self._options
 
     def set_options(self, newoptions):
-        self._options = newoptions
+        self._options.update(newoptions)
 
     options = property(get_options, set_options)
-        
+
     def set_option(self, option, value):
         self._options[option] = value
