@@ -64,6 +64,8 @@ class MathtexBackendCairo(MathtexBackend):
 
         if cairo.HAS_PDF_SURFACE:
             formats.append('pdf')
+        if cairo.HAS_PS_SURFACE:
+            formats.append('ps')
         if cairo.HAS_SVG_SURFACE:
             formats.append('svg')
 
@@ -105,6 +107,18 @@ class MathtexBackendCairo(MathtexBackend):
             surface = cairo.ImageSurface(cairo.FORMAT_ARGB32,
                                          int(ceil(self.width)),
                                          int(ceil(self.height + self.depth)))
+        elif format == 'pdf':
+            width = self.width
+            height = self.height + self.depth
+            surface = cairo.PDFSurface(filename, width, height)
+        elif format == 'ps':
+            surface = cairo.PSSurface(filename,
+                                      self.width,
+                                      self.height + self.depth)
+        elif format == 'svg':
+            surface = cairo.SVGSurface(filename,
+                                       self.width,
+                                       self.height + self.depth)
 
         ctx = cairo.Context(surface)
         self.render_to_context(ctx)

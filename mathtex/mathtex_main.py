@@ -69,7 +69,7 @@ class Mathtex:
         elif backend == 'cairo':
             if not HAVE_CAIRO_BACKEND:
                 raise RuntimeError("Cairo backend requested when not available.")
-            backend = MathtexBackendCario()
+            backend = MathtexBackendCairo()
 
         # Set the options for the backend
         backend.options = backend_options
