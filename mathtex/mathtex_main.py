@@ -23,12 +23,14 @@ class Mathtex:
         'stix'   : StixFonts
         }
 
-    def __init__(self, expr, fontset = 'bakoma', fontsize = 12, dpi = 100):
+    def __init__(self, expr, fontset = 'bakoma', fontsize = 12, dpi = 100,
+                       default_style = 'it'):
         if is_string_like(fontset):
             fontset = self.fontset_mapping[fontset]()
 
         # Parse the expression
-        self.boxmodel = MathtexParser().parse(expr, fontset, fontsize, dpi)
+        self.boxmodel = MathtexParser().parse(expr, fontset, fontsize,
+                                              dpi, default_style)
 
         # Use ship to get a stream of glyphs and rectangles
         self.rects, self.glyphs, bbox = ship(0, 0, self.boxmodel)

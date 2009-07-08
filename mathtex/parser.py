@@ -270,13 +270,14 @@ class MathtexParser(object):
         self._state_stack = None
         self._em_width_cache = {}
 
-    def parse(self, s, fonts_object, fontsize, dpi):
+    def parse(self, s, fonts_object, fontsize, dpi, default_style):
         """
         Parse expression *s* using the given *fonts_object* for
         output, at the given *fontsize* and *dpi*.
 
         Returns the parse tree of :class:`Node` instances.
         """
+        self._default_style = default_style
         self._state_stack = [self.State(fonts_object, 'default', 'rm', fontsize, dpi)]
         try:
             self._expression.parseString(s)
@@ -359,7 +360,7 @@ class MathtexParser(object):
         hlist = Hlist(symbols)
         # We're going into math now, so set font to 'it'
         self.push_state()
-        self.get_state().font =  'it' # rcParams['mathtext.default']
+        self.get_state().font =  self._default_style
         return [hlist]
 
     def _make_space(self, percentage):
@@ -369,7 +370,7 @@ class MathtexParser(object):
         width = self._em_width_cache.get(key)
         if width is None:
             metrics = state.font_output.get_metrics(
-                state.font, '', 'm', state.fontsize, state.dpi)
+                state.font, self._default_style, 'm', state.fontsize, state.dpi)
             width = metrics.advance
             self._em_width_cache[key] = width
         return Kern(width * percentage)
@@ -690,7 +691,7 @@ class MathtexParser(object):
         # Shift so the fraction line sits in the middle of the
         # equals sign
         metrics = state.font_output.get_metrics(
-            state.font, '', '=', state.fontsize, state.dpi)
+            state.font, self._default_style, '=', state.fontsize, state.dpi)
         shift = (cden.height -
                  ((metrics.ymax + metrics.ymin) / 2 -
                   thickness * 3.0))
