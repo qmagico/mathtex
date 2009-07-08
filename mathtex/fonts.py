@@ -42,8 +42,9 @@ class Fonts(object):
     An abstract base class for a system of fonts used by Mathtex.
     """
 
-    def __init__(self):
+    def __init__(self, default_style = 'it'):
         self.used_characters = {}
+        self.default_style = default_style
 
     def get_kern(self, font1, fontclass1, sym1, fontsize1,
                        font2, fontclass2, sym2, fontsize2, dpi):
@@ -157,8 +158,7 @@ class TruetypeFonts(Fonts):
         pclt = cached_font.font.get_sfnt_table('pclt')
         if pclt is None:
             # Some fonts don't store the xHeight, so we do a poor man's xHeight
-            #metrics = self.get_metrics(font, rcParams['mathtext.default'], 'x', fontsize, dpi)
-            metrics = self.get_metrics(font, '', 'x', fontsize, dpi)
+            metrics = self.get_metrics(font, self.default_style, 'x', fontsize, dpi)
             return metrics.iceberg
         xHeight = (pclt['xHeight'] / 64.0) * (fontsize / 12.0) * (dpi / 100.0)
         return xHeight
@@ -481,7 +481,7 @@ class StixFonts(UnicodeFonts):
             elif not doing_sans_conversion:
                 # This will generate a dummy character
                 uniindex = 0x1
-                fontname = rcParams['mathtext.default']
+                fontname = self.default_style
 
         # Handle private use area glyphs
         if (fontname in ('it', 'rm', 'bf') and

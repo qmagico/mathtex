@@ -270,14 +270,14 @@ class MathtexParser(object):
         self._state_stack = None
         self._em_width_cache = {}
 
-    def parse(self, s, fonts_object, fontsize, dpi, default_style):
+    def parse(self, s, fonts_object, fontsize, dpi):
         """
         Parse expression *s* using the given *fonts_object* for
         output, at the given *fontsize* and *dpi*.
 
         Returns the parse tree of :class:`Node` instances.
         """
-        self._default_style = default_style
+        self._default_style = fonts_object.default_style
         self._state_stack = [self.State(fonts_object, 'default', 'rm', fontsize, dpi)]
         try:
             self._expression.parseString(s)
