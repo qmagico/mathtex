@@ -14,13 +14,14 @@ except ImportError:
 from mathtex.backends.backend_image import MathtexBackendImage
 
 # Fontsets
-from mathtex.fonts import BakomaFonts, StixFonts
+from mathtex.fonts import BakomaFonts, UnicodeFonts, StixFonts
 
 class Mathtex:
     fontset_mapping = {
-        'bakoma' : BakomaFonts,
-        'cm'     : BakomaFonts, # Alias for Bakoma
-        'stix'   : StixFonts
+        'bakoma'  : BakomaFonts,
+        'cm'      : BakomaFonts, # Alias for Bakoma
+        'unicode' : UnicodeFonts,
+        'stix'    : StixFonts
         }
 
     def __init__(self, expr, fontset = 'bakoma', fontsize = 12, dpi = 100,

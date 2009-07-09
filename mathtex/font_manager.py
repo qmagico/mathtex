@@ -708,7 +708,7 @@ class FontProperties(object):
     def __hash__(self):
         l = [(k, getattr(self, "get" + k)()) for k in sorted(self.__dict__)]
         return hash(repr(l))
- 
+
     def __str__(self):
         return self.get_fontconfig_pattern()
 
@@ -1070,7 +1070,7 @@ class FontManager:
             if family1.lower() in font_family_aliases:
                 if family1 == 'sans':
                     family1 == 'sans-serif'
-                options = rcParams['font.' + family1]
+                options = [] #rcParams['font.' + family1]
                 if family2 in options:
                     idx = options.index(family2)
                     return 0.1 * (float(idx) / len(options))

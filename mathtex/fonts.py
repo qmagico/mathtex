@@ -314,14 +314,13 @@ class UnicodeFonts(TruetypeFonts):
     def __init__(self, *args, **kwargs):
         # This must come first so the backend's ownMathTextWarninger is set correctly
         if False: #rcParams['mathtext.fallback_to_cm']:
-            self.cm_fallback = BakomaFonts(*args, **kwargs)
+            self.cm_fallback = BakomaFonts()
         else:
             self.cm_fallback = None
-        TruetypeFonts.__init__(self, *args, **kwargs)
+        TruetypeFonts.__init__(self)
         self.fontmap = {}
         for texfont in "cal rm tt it bf sf".split():
-            #prop = rcParams['mathtext.' + texfont]
-            prop = 'serif'
+            prop = kwargs[texfont]
             font = findfont(prop)
             self.fontmap[texfont] = font
         prop = FontProperties('cmex10')
