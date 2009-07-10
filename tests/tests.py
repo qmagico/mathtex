@@ -42,10 +42,13 @@ arg_parser.add_option('-L', '--list-presets', dest='list_presets',
                       default=False, action='store_true',
                       help='list preset test rendering styles')
 
-# Tests to run
+# Tests & presets to run
 arg_parser.add_option('-t', '--run-tests', dest='tests',
                       default=','.join(tests.keys()),
                       help='list of comma separated test names/indexes to run')
+arg_parser.add_option('-T', '--run-presets', dest='presets',
+                      default=','.join([str(s) for s in range(0, len(presets))]),
+                      help='list of preset indexes to run')
 
 (options, args) = arg_parser.parse_args()
 
@@ -76,12 +79,14 @@ for name in options.tests.split(','):
         name = tests.keys()[name]
     actual_tests[name] = tests[name]
 
+actual_presets = [presets[int(i)] for i in options.presets.split(',')]
+
 # For progress reports
-total = len(actual_tests) * len(presets)
+total = len(actual_tests) * len(actual_presets)
 count = 0
 
 for (name, tex) in actual_tests.iteritems():
-    for fontsize, dpi in presets:
+    for fontsize, dpi in actual_presets:
         m = Mathtex(tex, fontsize=fontsize, dpi=dpi)
 
         if options.gen_output:
