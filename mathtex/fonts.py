@@ -320,9 +320,16 @@ class UnicodeFonts(TruetypeFonts):
         TruetypeFonts.__init__(self)
         self.fontmap = {}
         for texfont in "cal rm tt it bf sf".split():
-            prop = kwargs[texfont]
-            font = findfont(prop)
-            self.fontmap[texfont] = font
+            if texfont in kwargs:
+                prop = kwargs[texfont]
+                font = findfont(prop)
+                self.fontmap[texfont] = font
+        # Synthesize bf and it where possible
+        if 'rm' in kwargs:
+            if 'it' not in kwargs:
+                self.fontmap['it'] = findfont(kwargs['rm'] + ':italic')
+            if 'bf' not in kwargs:
+                self.fontmap['bf'] = findfont(kwargs['rm'] + ':bold')
         prop = FontProperties('cmex10')
         font = findfont(prop)
         self.fontmap['ex'] = font
