@@ -1,0 +1,39 @@
+#! /usr/bin/env python
+# Mathtex command line utility
+from mathtex import Mathtex
+from optparse import OptionParser
+
+# Configure the command line argument parser
+arg_parser = OptionParser()
+
+# DPI option
+arg_parser.add_option('-d', '--dpi', dest='dpi', type='int',
+                      default=100, help='dpi to render the equation at')
+
+# Fontset to use
+arg_parser.add_option('-f', '--fontset', dest='fontset', type='choice',
+                      choices=['bakoma', 'cm', 'stix'], default='cm',
+                      help='fonts to render the equation with')
+
+# Font size to use
+arg_parser.add_option('-x', '--font-size', dest='fontsize', type='float',
+                      default=12.0, help='base font size')
+
+# Default font style to use
+arg_parser.add_option('-s', '--default-style', dest='style',
+                      type='choice', choices=['rm', 'it'], default='it',
+                      help='default character style to use')
+
+
+
+(options, args) = arg_parser.parse_args()
+
+# If no expression was provided, read one from stdin
+if len(args) == 1:
+    expr = raw_input()
+else:
+    expr = args[1]
+
+# Create the Mathtex object to do the parsing
+Mathtex(expr, options.fontset, options.fontsize, options.dpi,
+            options.style).save(args[0])
