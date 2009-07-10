@@ -83,8 +83,8 @@ class TruetypeFonts(Fonts):
         def __repr__(self):
             return repr(self.font)
 
-    def __init__(self):
-        Fonts.__init__(self)
+    def __init__(self, *args, **kwargs):
+        Fonts.__init__(self, *args, **kwargs)
         self.glyphd = {}
         self._fonts = {}
 

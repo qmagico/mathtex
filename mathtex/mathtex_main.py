@@ -59,7 +59,9 @@ class Mathtex:
 
         return backend.as_rgba()
 
-    def save(self, filename, format, backend='auto', backend_options={}):
+    def save(self, filename, format='auto', backend='auto', backend_options={}):
+        if format == 'auto':
+            format = filename.split('.')[1]
         if backend == 'auto':
             if format == 'png':
                 backend = 'image'
