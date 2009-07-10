@@ -173,7 +173,6 @@ class Char(Node):
         """
         Render the character to the canvas
         """
-        print "Rendering at: %f %f" % (x, y)
         info = self.font_output._get_info(self.font, self.font_class,
                                           self.c, self.fontsize, self.dpi)
         return (x, y, info)
