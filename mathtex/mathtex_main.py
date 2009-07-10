@@ -61,7 +61,7 @@ class Mathtex:
 
     def save(self, filename, format='auto', backend='auto', backend_options={}):
         if format == 'auto':
-            format = filename.split('.')[1]
+            format = filename.split('.')[-1]
         if backend == 'auto':
             if format == 'png':
                 backend = 'image'

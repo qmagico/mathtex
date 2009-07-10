@@ -49,6 +49,8 @@ class MathtexBackendImage(MathtexBackend):
         for x1, y1, x2, y2 in rects:
             self._render_rect(x1, y1, x2, y2)
 
+        self._rendered = True
+
     def save(self, filename, format):
         if format not in self.get_formats():
             raise RuntimeError('Unsupported save format')
