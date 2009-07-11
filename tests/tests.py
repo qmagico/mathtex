@@ -9,7 +9,46 @@ import pickle
 tests = {
     'basic_dots' : r'$a+b+\dots+\dot{s}+\ldots$',
     'equal'      : r'$x \doteq y$',
-    'basic_esc'  : r'\$100.00 $\alpha \_$'
+    'basic_esc'  : r'\$100.00 $\alpha \_$',
+    'basic_frac' : r'$\frac{\$100.00}{y}$',
+    'basic_sym'  : r'$x   y$',
+    'bin_opts'   : r'$x+y\ x=y\ x<y\ x:y\ x,y\ x@y$',
+    'bin_opts2'  : r'$100\%y\ x*y\ x/y x\$y$',
+    'forall'     :r'$x\leftarrow y\ x\forall y\ x-y$',
+    'fonts'      : r'$x \sf x \bf x {\cal X} \rm x$',
+    'spaces'     : r'$x\ x\,x\;x\quad x\qquad x\!x\hspace{ 0.5 }y$',
+    'braces'     : r'$\{ \rm braces \}$',
+    'braces2'    : r'$\left[\left\lfloor\frac{5}{\frac{\left(3\right)}{4}} y\right)\right]$',
+    'braces3'    : r'$\left(x\right)$',
+    'func'  : r'$\sin(x)$',
+    'subscript'  : r'$x_2$',
+    'superscript' : r'$x^2$',
+    'subsuper'   : r'$x^2_y$',
+    'subsuper2'  : r'$x_y^2$',
+    'product'    : r'$\prod_{i=\alpha_{i+1}}^\infty$',
+    'frac'       : r'$x = \frac{x+\frac{5}{2}}{\frac{y+3}{8}}$',
+    'deriv'      : r'$dz/dt = \gamma x^2 + {\rm sin}(2\pi y+\phi)$',
+    'mixin'      : r'Foo: $\alpha_{i+1}^j = {\rm sin}(2\pi f_j t_i) e^{-5 t_i/\tau}$',
+    'maxin2'     : r'$\mathcal{R}\prod_{i=\alpha_{i+1}}^\infty a_i \sin(2 \pi f x_i)$',
+    'nonmath'    : r'Variable $i$ is good',
+    'greek'      : r'$\Delta_i^j$',
+    'greek2'     : r'$\Delta^j_{i+1}$',
+    'accent'     :  r'$\ddot{o}\acute{e}\grave{e}\hat{O}\breve{\imath}\tilde{n}\vec{q}$',
+    'func2'      : r"$\arccos((x^i))$",
+    'frac2'      : r"$\gamma = \frac{x=\frac{6}{8}}{y} \delta$",
+    'limit'      : r'$\limsup_{x\to\infty}$',
+    'int'        : r'$\oint^\infty_0$',
+    'prime'      : r"$f^'$",
+    'frac3'      : r'$\frac{x_2888}{y}$',
+    'sqrt'       : r"$\sqrt[3]{\frac{X_2}{Y}}=5$",
+    'sqrt2'      : r"$\sqrt[5]{\prod^\frac{x}{2\pi^2}_\infty}$",
+    'sqrt3'      : r"$\sqrt[3]{x}=5$",
+    'frac4'      : r'$\frac{X}{\frac{X}{Y}}$',
+    'mixin3'     : r"$W^{3\beta}_{\delta_1 \rho_1 \sigma_2} = U^{3\beta}_{\delta_1 \rho_1} + \frac{1}{8 \pi 2} \int^{\alpha_2}_{\alpha_2} d \alpha^\prime_2 \left[\frac{ U^{2\beta}_{\delta_1 \rho_1} - \alpha^\prime_2U^{1\beta}_{\rho_1 \sigma_2} }{U^{0\beta}_{\rho_1 \sigma_2}}\right]$",
+    'int2'       : r'$\mathcal{H} = \int d \tau \left(\epsilon E^2 + \mu H^2\right)$',
+    'accent2'    : r'$\widehat{abc}\widetilde{def}$',
+    'greek3'     : r'$\Gamma \Delta \Theta \Lambda \Xi \Pi \Sigma \Upsilon \Phi \Psi \Omega$',
+    'greek4'     : r'$\alpha \beta \gamma \delta \epsilon \zeta \eta \theta \iota \lambda \mu \nu \xi \pi \kappa \rho \sigma \tau \upsilon \phi \chi \psi$'
 }
 
 # A list of (font size, dpi) to run each test at
@@ -87,6 +126,9 @@ count = 0
 
 for (name, tex) in actual_tests.iteritems():
     for fontsize, dpi in actual_presets:
+        count += 1
+        print "Test %d of %d ['%s' at (%.1f, %d)]" % (count, total, name, fontsize, dpi)
+
         m = Mathtex(tex, fontsize=fontsize, dpi=dpi)
 
         if options.gen_output:
