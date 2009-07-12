@@ -65,7 +65,7 @@ arg_parser.add_option('-n', '--no-output', dest='gen_output',
 
 # Hashfile
 arg_parser.add_option('-o', '--hash-file', dest='hashfile',
-                      default='test-hashes.pickle',
+                      default=os.path.join(os.path.dirname(__file__), 'test-hashes.pickle'),
                       help='pickled hash file to compare with')
 
 # Update hashfile
@@ -132,7 +132,8 @@ for (name, tex) in actual_tests.iteritems():
         m = Mathtex(tex, fontsize=fontsize, dpi=dpi)
 
         if options.gen_output:
-            m.save("%s.%dpt.%ddpi.png" % (name, fontsize, dpi))
+            m.save(os.path.join(os.path.dirname(__file__),
+                                "%s.%dpt.%ddpi.png" % (name, fontsize, dpi)))
 
         h = md5(m.as_rgba_bitmap()).hexdigest()
         results[(name, fontsize, dpi)] = h
