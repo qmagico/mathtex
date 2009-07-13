@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 # Mathtex command line utility
 from mathtex.mathtex_main import Mathtex
+from mathtex.fonts import BakomaFonts, StixFonts, UnicodeFonts
 from optparse import OptionParser
 
 # Configure the command line argument parser
@@ -12,8 +13,12 @@ arg_parser.add_option('-d', '--dpi', dest='dpi', type='int',
 
 # Fontset to use
 arg_parser.add_option('-f', '--fontset', dest='fontset', type='choice',
-                      choices=['bakoma', 'cm', 'stix'], default='cm',
+                      choices=['bakoma', 'cm', 'stix', 'unicode'], default='cm',
                       help='fonts to render the equation with')
+
+# Unicode fonts to use
+arg_parser.add_option('-u', '--unicode-fonts', dest='fontlist', default='',
+                      help='unicode fonts to use, in the form of style=font,..., e.g. rm=times,sf=arial')
 
 # Font size to use
 arg_parser.add_option('-x', '--font-size', dest='fontsize', type='float',
@@ -28,12 +33,29 @@ arg_parser.add_option('-s', '--default-style', dest='style',
 
 (options, args) = arg_parser.parse_args()
 
+# Sanity checks
+if options.fontset == 'unicode' and options.fontlist == '':
+    arg_parser.error('font list required to use unicode fonts')
+elif options.fontset != 'unicode' and options.fontlist != '':
+    arg_parser.error('-u is only available for unicode fonts')
+
+
 # If no expression was provided, read one from stdin
 if len(args) == 1:
     expr = raw_input()
 else:
     expr = args[1]
 
+# Create the fontset
+if options.fontset == 'bakoma' or options.fontset == 'cm':
+    fonts = BakomaFonts()
+elif options.fontset == 'stix':
+    fonts = StixFonts()
+elif options.fontset == 'unicode':
+    # Need to parse the font list
+    flatlist = options.fontlist.replace('=', ',').split(',')
+    fonts = UnicodeFonts(**dict(zip(flatlist[::2], flatlist[1::2])))
+
 # Create the Mathtex object to do the parsing
-Mathtex(expr, options.fontset, options.fontsize, options.dpi,
+Mathtex(expr, fonts, options.fontsize, options.dpi,
             options.style).save(args[0])
