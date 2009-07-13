@@ -53,7 +53,7 @@ print_raw("")
 print_raw("REQUIRED DEPENDENCIES")
 
 # None, currently. This is likely to change
-package_data = {'mathtex' : [] }
+package_data = {'mathtex' : ['data/fonts/*.ttf'] }
 
 # Check for numpy, but it does not need to be built
 if not check_for_numpy():

@@ -51,7 +51,7 @@ except NameError:
 # We may need/want AFM support in the future
 #from matplotlib import afm
 from mathtex import ft2font
-from mathtex.util import get_configdir, is_string_like
+from mathtex.util import get_configdir, get_datadir, is_string_like
 
 # For the fontconfig pattern parser
 import re
@@ -970,9 +970,7 @@ class FontManager:
         self.__default_weight = weight
         self.default_size = size
 
-        #paths = [os.path.join(rcParams['datapath'], 'fonts', 'ttf'),
-        #         os.path.join(rcParams['datapath'], 'fonts', 'afm')]
-        paths = []
+        paths = [os.path.join(get_datadir(), 'fonts')]
 
         #  Create list of font paths
         for pathname in ['TTFPATH', 'AFMPATH']:

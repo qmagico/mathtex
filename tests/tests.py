@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 # Mathtex unit tests
 import sys, os
-from mathtex import Mathtex
+from mathtex.mathtex_main import Mathtex
 from optparse import OptionParser
 from hashlib import md5
 import pickle

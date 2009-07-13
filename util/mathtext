@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 # Mathtex command line utility
-from mathtex import Mathtex
+from mathtex.mathtex_main import Mathtex
 from optparse import OptionParser
 
 # Configure the command line argument parser

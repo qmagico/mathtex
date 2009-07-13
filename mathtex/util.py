@@ -49,6 +49,20 @@ def get_configdir():
 
     return p
 
+def get_datadir():
+    'get the path to mathtex data'
+
+    if 'MATHTEXDATA' in os.environ:
+        path = os.environ['MATHTEXDATA']
+        if not os.path.isdir(path):
+            raise RuntimeError('Path in environment MATHTEXDATA not a directory')
+        return path
+
+    path = os.sep.join([os.path.dirname(__file__), 'data'])
+    if os.path.isdir(path): return path
+
+    raise RuntimeError('Could not find the mathtex data files')
+
 def get_home():
     """
     Find user's home directory if possible.
