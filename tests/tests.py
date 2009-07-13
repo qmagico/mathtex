@@ -52,8 +52,10 @@ tests = {
 }
 
 # A list of (font size, dpi) to run each test at
-presets = [(10, 100), (12, 100), (32, 100),
-           (10, 300), (12, 300), (32, 300)]
+presets = [(10, 100, 'bakoma'), (12, 100, 'bakoma'),
+           (10, 100, 'stix'), (12, 100, 'stix'),
+           (10, 300, 'bakoma'), (12, 300, 'bakoma'),
+           (10, 300, 'stix'), (12, 300, 'stix')]
 
 # Command line options
 arg_parser = OptionParser()
@@ -103,8 +105,8 @@ if options.list_tests:
     sys.exit()
 elif options.list_presets:
     print 'Available testing presets:'
-    for (i, (fontsize, dpi)) in zip(range(0, len(presets)), presets):
-        print '[%d] %.1f pt at %d dpi' % (i, fontsize, dpi)
+    for (i, (fontsize, dpi, font)) in zip(range(0, len(presets)), presets):
+        print '[%d] %s %.1f pt at %d dpi' % (i, font, fontsize, dpi)
     sys.exit()
 
 # Otherwise run the tests
@@ -125,18 +127,19 @@ total = len(actual_tests) * len(actual_presets)
 count = 0
 
 for (name, tex) in actual_tests.iteritems():
-    for fontsize, dpi in actual_presets:
+    for fontsize, dpi, font in actual_presets:
         count += 1
-        print "Test %d of %d ['%s' at (%.1f, %d)]" % (count, total, name, fontsize, dpi)
+        print "Test %d of %d ['%s' at (%.1f, %d, %s)]" % (count, total, name,
+                                                          fontsize, dpi, font)
 
-        m = Mathtex(tex, fontsize=fontsize, dpi=dpi)
+        m = Mathtex(tex, fontset=font, fontsize=fontsize, dpi=dpi)
 
         if options.gen_output:
             m.save(os.path.join(os.path.dirname(__file__),
-                                "%s.%dpt.%ddpi.png" % (name, fontsize, dpi)))
+                                "%s.%s.%dpt.%ddpi.png" % (name, font, fontsize, dpi)))
 
         h = md5(m.as_rgba_bitmap()).hexdigest()
-        results[(name, fontsize, dpi)] = h
+        results[(name, fontsize, dpi, font)] = h
 
 # Compare hashes against a previous run
 if os.path.isfile(options.hashfile) and not options.update:
@@ -145,7 +148,7 @@ if os.path.isfile(options.hashfile) and not options.update:
     for k in results.keys():
         if k in prev_results:
             if results[k] != prev_results[k]:
-                print "Test '%s' at (%.1f, %d) failed!" % k
+                print "Test '%s' at (%.1f, %d, %s) failed!" % k
 # Update/write new hashes
 elif not os.path.isfile(options.hashfile) or options.update:
     pickle.dump(results, open(options.hashfile, 'wb'))
