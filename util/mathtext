@@ -3,6 +3,8 @@
 from mathtex.mathtex_main import Mathtex
 from mathtex.fonts import BakomaFonts, StixFonts, UnicodeFonts
 from optparse import OptionParser
+from tempfile import mkstemp
+import os
 
 # Configure the command line argument parser
 arg_parser = OptionParser()
@@ -39,13 +41,6 @@ if options.fontset == 'unicode' and options.fontlist == '':
 elif options.fontset != 'unicode' and options.fontlist != '':
     arg_parser.error('-u is only available for unicode fonts')
 
-
-# If no expression was provided, read one from stdin
-if len(args) == 1:
-    expr = raw_input()
-else:
-    expr = args[1]
-
 # Create the fontset
 if options.fontset == 'bakoma' or options.fontset == 'cm':
     fonts = BakomaFonts()
@@ -56,6 +51,29 @@ elif options.fontset == 'unicode':
     flatlist = options.fontlist.replace('=', ',').split(',')
     fonts = UnicodeFonts(**dict(zip(flatlist[::2], flatlist[1::2])))
 
-# Create the Mathtex object to do the parsing
-Mathtex(expr, fonts, options.fontsize, options.dpi,
+# If no expression was provided, but a filename was, read from stdin
+if len(args) == 1:
+    Mathtex(raw_input(), fonts, options.fontsize, options.dpi,
             options.style).save(args[0])
+# Both filename and expression
+elif len(args) == 2:
+    Mathtex(args[1], fonts, options.fontsize, options.dpi,
+            options.style).save(args[0])
+# Neither, enter persistent mode
+else:
+    # TODO: Removed hard-coded .png output
+    while True:
+        expr = raw_input()
+
+        if expr == '':
+            break
+
+        # Create a temp file
+        fd, name = mkstemp(suffix='.mathtex.png')
+        os.close(fd)
+
+        # Eval the expression
+        Mathtex(expr, fonts, options.fontsize, options.dpi,
+                options.style).save(name)
+
+        print name
