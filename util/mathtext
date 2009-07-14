@@ -65,6 +65,10 @@ elif len(args) == 2:
             options.style).save(args[0], options.format)
 # Neither, enter persistent mode
 else:
+    # Default to PNG
+    if options.format == 'auto':
+        options.format = 'png'
+
     while True:
         expr = raw_input()
 
