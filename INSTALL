@@ -1,0 +1,29 @@
+INTRODUCTION
+============
+
+  Mathtex requires at a minimum python 2.3, numpy, libpng and freetype.
+  The (optional) cairo backend--which provides support for SVG, PDF and
+  PS output--requires PyCairo to be installed.
+
+COMPILING
+=========
+
+  In order to compile mathtex you will need the development versions of
+  FreeType, libpng and zlib available on your system.
+
+  Once all of these have been installed mathtex can be compiled and
+  installe as follows
+
+    python setup.py build
+    python setup.py install
+
+  It is possible to install mathtex on a per-user basis by using the
+  --home argument. For example, to install mathtex just for the current
+  user
+
+    python setup.py install -home=~
+
+  This has the advantage of not requiring root privilages.
+
+  As mathtex is still beta-quality software it is not available via any
+  distributions package management systems.
