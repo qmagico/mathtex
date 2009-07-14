@@ -18,6 +18,10 @@ arg_parser.add_option('-f', '--fontset', dest='fontset', type='choice',
                       choices=['bakoma', 'cm', 'stix', 'unicode'], default='cm',
                       help='fonts to render the equation with')
 
+# Output format
+arg_parser.add_option('-j', '--format', dest='format', default='auto',
+                      help='file format to render the equation to')
+
 # Unicode fonts to use
 arg_parser.add_option('-u', '--unicode-fonts', dest='fontlist', default='',
                       help='unicode fonts to use, in the form of style=font,..., e.g. rm=times,sf=arial')
@@ -54,14 +58,13 @@ elif options.fontset == 'unicode':
 # If no expression was provided, but a filename was, read from stdin
 if len(args) == 1:
     Mathtex(raw_input(), fonts, options.fontsize, options.dpi,
-            options.style).save(args[0])
+            options.style).save(args[0], options.format)
 # Both filename and expression
 elif len(args) == 2:
     Mathtex(args[1], fonts, options.fontsize, options.dpi,
-            options.style).save(args[0])
+            options.style).save(args[0], options.format)
 # Neither, enter persistent mode
 else:
-    # TODO: Removed hard-coded .png output
     while True:
         expr = raw_input()
 
@@ -69,11 +72,11 @@ else:
             break
 
         # Create a temp file
-        fd, name = mkstemp(suffix='.mathtex.png')
+        fd, name = mkstemp(suffix='.mathtex.' + options.format)
         os.close(fd)
 
         # Eval the expression
         Mathtex(expr, fonts, options.fontsize, options.dpi,
-                options.style).save(name)
+                options.style).save(name, options.format)
 
         print name
