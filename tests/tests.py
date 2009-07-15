@@ -5,6 +5,7 @@ from mathtex.mathtex_main import Mathtex
 from mathtex.font_manager import ttfFontProperty
 from optparse import OptionParser
 from hashlib import md5
+from math import ceil
 import pickle
 
 tests = {
@@ -66,6 +67,35 @@ def extract_glyphs(glyphs):
         results.append((name, info.fontsize, info.num, ox, oy - info.offset))
 
     return results
+
+def fuzzy_rect_cmp(rects1, rects2):
+    if len(rects1) != len(rects2):
+        return False
+
+    for r1, r2 in zip(rects1, rects2):
+        if [ceil(x) for x in r1] != [ceil(x) for x in r2]:
+            print [ceil(x) for x in r1]
+            print [ceil(x) for x in r2]
+            return False
+
+    return True
+
+def fuzzy_glyph_cmp(glyphs1, glyphs2):
+    if len(glyphs1) != len(glyphs2):
+        return False
+
+    for glyph1, glyph2 in zip(glyphs1, glyphs2):
+        name1, fontsize1, num1, ox1, oy1 = glyph1
+        name2, fontsize2, num2, ox2, oy2 = glyph2
+
+        if name1 != name2 \
+        or ceil(fontsize1) != ceil(fontsize2) \
+        or num1 != num2 \
+        or ceil(ox1) != ceil(ox2) \
+        or ceil(oy1) != ceil(oy2):
+            return False
+
+    return True
 
 # Command line options
 arg_parser = OptionParser()
@@ -167,13 +197,13 @@ if os.path.isfile(options.hashfile) and not options.update:
     # TODO: Fuzzy comparison with tolerance
     for k in glyphs.keys():
         if k in ref_glyphs:
-            if glyphs[k] != ref_glyphs[k]:
+            if not fuzzy_glyph_cmp(glyphs[k], ref_glyphs[k]):
                 print "Test '%s' at (%.1f, %d, %s) failed glyph comparison!" % k
         else:
             print "Test '%s' has no reference glyph data!" % (k[0])
 
         if k in ref_rects:
-            if rects[k] != ref_rects[k]:
+            if not fuzzy_rect_cmp(rects[k], ref_rects[k]):
                 print "Test '%s' at (%.1f, %d, %s) failed rect comparison!" % k
         else:
             print "Test '%s' has no reference rect data!" % (k[0])
