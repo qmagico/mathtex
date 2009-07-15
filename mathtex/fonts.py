@@ -88,6 +88,10 @@ class TruetypeFonts(Fonts):
         self.glyphd = {}
         self._fonts = {}
 
+        filename = findfont('vera')
+        default_font = self.CachedFont(FT2Font(str(filename)))
+        self._fonts['default'] = self._fonts['regular'] = default_font
+
     def destroy(self):
         self.glyphd = None
         Fonts.destroy(self)
