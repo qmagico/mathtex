@@ -6,6 +6,9 @@ from optparse import OptionParser
 from tempfile import mkstemp
 import os
 
+def print_dimensions(m):
+    print '[%.2f, %.2f, %.2f]' % (m.width, m.height, m.depth)
+
 # Configure the command line argument parser
 arg_parser = OptionParser()
 
@@ -35,7 +38,9 @@ arg_parser.add_option('-s', '--default-style', dest='style',
                       type='choice', choices=['rm', 'it'], default='it',
                       help='default character style to use')
 
-
+# If to output bounding information or not
+arg_parser.add_option('-b', '--print-dimensions', dest='dim', default=False,
+                      action='store_true', help='print the dimensions for the equation')
 
 (options, args) = arg_parser.parse_args()
 
@@ -55,14 +60,19 @@ elif options.fontset == 'unicode':
     flatlist = options.fontlist.replace('=', ',').split(',')
     fonts = UnicodeFonts(**dict(zip(flatlist[::2], flatlist[1::2])))
 
-# If no expression was provided, but a filename was, read from stdin
-if len(args) == 1:
-    Mathtex(raw_input(), fonts, options.fontsize, options.dpi,
-            options.style).save(args[0], options.format)
-# Both filename and expression
-elif len(args) == 2:
-    Mathtex(args[1], fonts, options.fontsize, options.dpi,
-            options.style).save(args[0], options.format)
+# Normal mode
+if len(args) == 1 or len(args) == 2:
+    if len(args) == 1:
+        expr = raw_input()
+    else:
+        expr = args[1]
+
+    m = Mathtex(expr, fonts, options.fontsize, options.dpi,
+                options.style)
+    m.save(args[0], options.format)
+
+    if options.dim:
+        print_dimensions(m)
 # Neither, enter persistent mode
 else:
     # Default to PNG
@@ -80,7 +90,11 @@ else:
         os.close(fd)
 
         # Eval the expression
-        Mathtex(expr, fonts, options.fontsize, options.dpi,
-                options.style).save(name, options.format)
+        m = Mathtex(expr, fonts, options.fontsize, options.dpi,
+                    options.style)
+        m.save(name, options.format)
 
         print name
+
+        if options.dim:
+            print_dimensions(m)
