@@ -2,6 +2,7 @@
 # Mathtex unit tests
 import sys, os
 from mathtex.mathtex_main import Mathtex
+from mathtex.font_manager import ttfFontProperty
 from optparse import OptionParser
 from hashlib import md5
 import pickle
@@ -57,6 +58,15 @@ presets = [(10, 100, 'bakoma'), (12, 100, 'bakoma'),
            (10, 300, 'bakoma'), (12, 300, 'bakoma'),
            (10, 300, 'stix'), (12, 300, 'stix')]
 
+def extract_glyphs(glyphs):
+    results = []
+
+    for ox, oy, info in glyphs:
+        name = ttfFontProperty(info.font).name.lower()
+        results.append((name, info.fontsize, info.num, ox, oy - info.offset))
+
+    return results
+
 # Command line options
 arg_parser = OptionParser()
 
@@ -110,7 +120,9 @@ elif options.list_presets:
     sys.exit()
 
 # Otherwise run the tests
-results = {}
+glyphs = {}
+rects = {}
+bitmap = {}
 
 # See what tests we have been asked to run
 actual_tests = {}
@@ -138,17 +150,44 @@ for (name, tex) in actual_tests.iteritems():
             m.save(os.path.join(os.path.dirname(__file__),
                                 "%s.%s.%dpt.%ddpi.png" % (name, font, fontsize, dpi)))
 
-        h = md5(m.as_rgba_bitmap()).hexdigest()
-        results[(name, fontsize, dpi, font)] = h
+        key = (name, fontsize, dpi, font)
+
+        glyphs[key] = extract_glyphs(m.glyphs)
+        rects[key] = m.rects
+        bitmap[key] = md5(m.as_rgba_bitmap()).hexdigest()
 
 # Compare hashes against a previous run
 if os.path.isfile(options.hashfile) and not options.update:
-    prev_results = pickle.load(open(options.hashfile, 'rb'))
+    # Load the reference results set
+    fh = open(options.hashfile, 'rb')
+    ref_glyphs = pickle.load(fh)
+    ref_rects = pickle.load(fh)
+    ref_bitmap = pickle.load(fh)
 
-    for k in results.keys():
-        if k in prev_results:
-            if results[k] != prev_results[k]:
-                print "Test '%s' at (%.1f, %d, %s) failed!" % k
+    # TODO: Fuzzy comparison with tolerance
+    for k in glyphs.keys():
+        if k in ref_glyphs:
+            if glyphs[k] != ref_glyphs[k]:
+                print "Test '%s' at (%.1f, %d, %s) failed glyph comparison!" % k
+        else:
+            print "Test '%s' has no reference glyph data!" % (k[0])
+
+        if k in ref_rects:
+            if rects[k] != ref_rects[k]:
+                print "Test '%s' at (%.1f, %d, %s) failed rect comparison!" % k
+        else:
+            print "Test '%s' has no reference rect data!" % (k[0])
+
+        if k in ref_bitmap:
+            if bitmap[k] != ref_bitmap[k]:
+                print "Test '%s' at (%.1f, %d, %s) failed bitmap comparison!" % k
+        else:
+            print "Test '%s' has no reference bitmap data!" % (k[0])
 # Update/write new hashes
 elif not os.path.isfile(options.hashfile) or options.update:
-    pickle.dump(results, open(options.hashfile, 'wb'))
+    fh = open(options.hashfile, 'wb')
+
+    # Dump the three result sets
+    pickle.dump(glyphs, fh)
+    pickle.dump(rects, fh)
+    pickle.dump(bitmap, fh)
