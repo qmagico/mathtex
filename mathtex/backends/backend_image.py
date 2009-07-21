@@ -65,3 +65,7 @@ class MathtexBackendImage(MathtexBackend):
     def as_rgba(self):
         assert self._rendered == True
         return self.image.as_rgba_str()
+
+    def as_mask(self):
+        assert self._rendered == True
+        return self.image.as_array()

@@ -49,6 +49,16 @@ class Mathtex:
         backend.set_canvas_size(self.width, self.height, self.depth, self.dpi)
         backend.render(self.glyphs, self.rects)
 
+    def as_mask(self):
+        """
+        Renders the expression to an alpha mask using the Image backend.
+        The result is returned as a numpy array.
+        """
+        backend = MathtexBackendImage()
+        self.render_to_backend(backend)
+
+        return backend.as_mask()
+
     def as_rgba_bitmap(self):
         """
         Renders the expression to an RGBA bitmap using the Image backend and
