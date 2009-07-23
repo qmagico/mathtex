@@ -34,7 +34,7 @@ def get_unicode_index(symbol):
 TeX/Type1 symbol"""%locals()
         raise ValueError, message
 
-class MathTextWarning(Warning):
+class MathTexWarning(Warning):
     pass
 
 class Fonts(object):
@@ -316,7 +316,7 @@ class UnicodeFonts(TruetypeFonts):
     use_cmex = True
 
     def __init__(self, *args, **kwargs):
-        # This must come first so the backend's ownMathTextWarninger is set correctly
+        # This must come first so the backend's ownMathTexWarninger is set correctly
         if False: #rcParams['mathtext.fallback_to_cm']:
             self.cm_fallback = BakomaFonts()
         else:
@@ -360,7 +360,7 @@ class UnicodeFonts(TruetypeFonts):
                 uniindex = ord('?')
                 warn("No TeX to unicode mapping for '%s'" %
                      sym.encode('ascii', 'backslashreplace'),
-                     MathTextWarning)
+                     MathTexWarning)
 
         fontname, uniindex = self._map_virtual_font(
             fontname, font_class, uniindex)
@@ -393,7 +393,7 @@ class UnicodeFonts(TruetypeFonts):
         if not found_symbol:
             if self.cm_fallback:
                 warn("Substituting with a symbol from Computer Modern.",
-                     MathTextWarning)
+                     MathTexWarning)
                 return self.cm_fallback._get_glyph(
                     fontname, 'it', sym, fontsize)
             else:
@@ -401,8 +401,8 @@ class UnicodeFonts(TruetypeFonts):
                     return self._get_glyph('rm', font_class, sym, fontsize)
                 warn("Font '%s' does not have a glyph for '%s'" %
                      (fontname, sym.encode('ascii', 'backslashreplace')),
-                     MathTextWarning)
-                warn("Substituting with a dummy symbol.", MathTextWarning)
+                     MathTexWarning)
+                warn("Substituting with a dummy symbol.", MathTexWarning)
                 fontname = 'rm'
                 new_fontname = fontname
                 cached_font = self._get_font(fontname)
