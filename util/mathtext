@@ -52,9 +52,9 @@ elif options.fontset != 'unicode' and options.fontlist != '':
 
 # Create the fontset
 if options.fontset == 'bakoma' or options.fontset == 'cm':
-    fonts = BakomaFonts()
+    fonts = BakomaFonts(options.style)
 elif options.fontset == 'stix':
-    fonts = StixFonts()
+    fonts = StixFonts(options.style)
 elif options.fontset == 'unicode':
     # Need to parse the font list
     flatlist = options.fontlist.replace('=', ',').split(',')
