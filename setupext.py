@@ -367,20 +367,6 @@ def build_ft2font(ext_modules, packages):
     ext_modules.append(module)
     BUILT_FT2FONT = True
 
-# Will need this later
-def build_ttconv(ext_modules, packages):
-    global BUILT_TTCONV
-    if BUILT_TTCONV: return # only build it if you you haven't already
-    deps = ['src/_ttconv.cpp',
-            'ttconv/pprdrv_tt.cpp',
-            'ttconv/pprdrv_tt2.cpp',
-            'ttconv/ttutil.cpp']
-
-    module = Extension('mathtex.ttconv', deps)
-    add_base_flags(module)
-    ext_modules.append(module)
-    BUILT_TTCONV = True
-
 def build_png(ext_modules, packages):
     global BUILT_PNG
     if BUILT_PNG: return # only build it if you you haven't already
