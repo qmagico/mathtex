@@ -52,7 +52,7 @@ if sys.platform == 'win32':
 print_raw("")
 print_raw("REQUIRED DEPENDENCIES")
 
-# None, currently. This is likely to change
+# Font data
 package_data = {'mathtex' : ['data/fonts/*.ttf'] }
 
 # Check for numpy, but it does not need to be built
@@ -84,12 +84,12 @@ print 'pymods', py_modules
 print 'packages', packages
 distrib = setup(name="mathtex",
       version= __version__,
-      description = "Python tex rendering engine",
-      author = "",
-      author_email="",
-      url = "",
+      description = "Python TeX rendering engine",
+      author = "Freddie Witherden and the matplotlib team.",
+      author_email="freddie@witherden.org",
+      url = "http://code.google.com/p/mathtex/",
       long_description = """
-      mathtex is a Tex rendering engine written in Python.
+      mathtex is a TeX math rendering engine written in Python.
       """,
       packages = packages,
       platforms='any',
