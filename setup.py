@@ -23,12 +23,12 @@ import sys
 major, minor1, minor2, s, tmp = sys.version_info
 
 if major==2 and minor1<4 or major<2:
-    raise SystemExit("""matplotlib requires Python 2.4 or later.""")
+    raise SystemExit("""mathtex requires Python 2.4 or later.""")
 
 import glob
 from distutils.core import setup
 from setupext import \
-     build_ft2font, build_ttconv, print_line, print_status,\
+     build_ft2font, print_line, print_status,\
      print_message, print_raw, check_for_freetype, check_for_libpng,\
      check_for_macosx, check_for_numpy, build_png, options
 #import distutils.sysconfig
