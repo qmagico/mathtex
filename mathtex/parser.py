@@ -7,7 +7,10 @@ ParserElement.enablePackrat()
 from mathtex.boxmodel import *
 from mathtex.fonts import *
 
-from mathtex.ft2font import FT2Font
+try:
+    from mathtex.ft2font import FT2Font
+except ImportError:
+    from matplotlib.ft2font import FT2Font
 
 ##############################################################################
 # PARSER

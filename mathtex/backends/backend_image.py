@@ -4,8 +4,13 @@ Image backend for Mathtex.
 Requires: FT2Font, numpy
 """
 from math import ceil
-from mathtex.ft2font import FT2Image
-from mathtex import _png
+
+try:
+    from mathtex.ft2font import FT2Image
+    from mathtex import _png
+except ImportError:
+    from matplotlib.ft2font import FT2Image
+    from matplotlib import _png
 
 from mathtex.backend import MathtexBackend
 

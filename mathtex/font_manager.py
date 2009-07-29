@@ -50,7 +50,11 @@ except NameError:
 
 # We may need/want AFM support in the future
 #from matplotlib import afm
-from mathtex import ft2font
+try:
+    from mathtex import ft2font
+except ImportError:
+    from matplotlib import ft2font
+
 from mathtex.util import get_configdir, get_datadir, is_string_like
 
 # For the fontconfig pattern parser
