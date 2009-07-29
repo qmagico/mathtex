@@ -678,13 +678,13 @@ class MathtexParser(object):
         den.shrink()
         cnum = HCentered([num])
         cden = HCentered([den])
-        width = max(num.width, den.width) + thickness * 10.
+        width = max(num.width, den.width)
         cnum.hpack(width, 'exactly')
         cden.hpack(width, 'exactly')
         vlist = Vlist([cnum,                      # numerator
                        Vbox(0, thickness * 2.0),  # space
                        Hrule(state),              # rule
-                       Vbox(0, thickness * 4.0),  # space
+                       Vbox(0, thickness * 2.0),  # space
                        cden                       # denominator
                        ])
 
