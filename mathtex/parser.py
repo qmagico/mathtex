@@ -713,18 +713,14 @@ class MathtexParser(object):
         # Determine the height of the body, and add a little extra to
         # the height so it doesn't seem cramped
         height = body.height - body.shift_amount + thickness * 5.0
-        depth = body.depth + body.shift_amount
+        depth = body.depth + body.shift_amount + thickness * 2.0
         check = AutoHeightChar(r'\__sqrt__', height, depth, state, always=True)
         height = check.height - check.shift_amount
         depth = check.depth + check.shift_amount
 
-        # Put a little extra space to the left and right of the body
-        padded_body = Hlist([Hbox(thickness * 2.0),
-                             body,
-                             Hbox(thickness * 2.0)])
         rightside = Vlist([Hrule(state),
                            Fill(),
-                           padded_body])
+                           body])
         # Stretch the glue between the hrule and the body
         rightside.vpack(height + (state.fontsize * state.dpi) / (100.0 * 12.0),
                         depth, 'exactly')
