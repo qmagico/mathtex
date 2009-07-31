@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+  SVN HEAD
+
+  * Improve the rendering of fractions (#4).
+  * Adjust the rendering of square roots (#5).
+
   2009-07-28: 0.1 RC 2
 
   * Fix an error in setup.py preventing mathtex from being built.
