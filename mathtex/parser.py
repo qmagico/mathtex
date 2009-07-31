@@ -595,7 +595,7 @@ class MathtexParser(object):
         xHeight = state.font_output.get_xheight(
             state.font, state.fontsize, state.dpi)
 
-        # Handle over/under symbols, such as sum or integral
+        # Handle over/under symbols, such as sum or product
         if self.is_overunder(nucleus):
             vlist = []
             shift = 0.
