@@ -1,7 +1,7 @@
 from mathtex.pyparsing import Combine, Group, Optional, Forward, Literal, \
     OneOrMore, ZeroOrMore, ParseException, Empty, ParseResults, Suppress, \
     oneOf, StringEnd, FollowedBy, Regex, ParserElement, ParseFatalException
-# Enable packrat parsing
+# Enable packrat parsing, this gives a ~2x speed-up
 ParserElement.enablePackrat()
 
 from mathtex.boxmodel import *
