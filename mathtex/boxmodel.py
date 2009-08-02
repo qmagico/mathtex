@@ -274,8 +274,7 @@ class List(Box):
             self.glue_ratio = 0.
         if o == 0:
             if len(self.children):
-                warn("%s %s: %r" % (error_type, self.__class__.__name__, self),
-                     MathTextWarning)
+                warn("%s %s: %r" % (error_type, self.__class__.__name__, self))
 
     def shrink(self):
         for child in self.children:
