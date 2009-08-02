@@ -504,11 +504,10 @@ class MathtexParser(object):
         #~ print "function", toks
         self.push_state()
         state = self.get_state()
-        thickness = state.font_output.get_underline_thickness(
-            state.font, state.fontsize, state.dpi)
         state.font = 'rm'
-        l = [Char(c, state) for c in toks[0]]
-        l.append(Hbox(2.0 * thickness))
+        l = [self._make_space(0.2)]
+        l += [Char(c, state) for c in toks[0]]
+        l += [self._make_space(0.2)]
         hlist = Hlist(l)
         self.pop_state()
         hlist.function_name = toks[0]
