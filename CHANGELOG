@@ -1,6 +1,10 @@
 CHANGELOG
 =========
 
+  SVN HEAD
+
+  * Improve the rendering of functions. Feedback welcome/wanted.
+
   2009-07-31: 0.1
 
   * Improve the rendering of fractions (issue #4).
