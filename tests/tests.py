@@ -50,7 +50,8 @@ tests = {
     'int2'       : r'$\mathcal{H} = \int d \tau \left(\epsilon E^2 + \mu H^2\right)$',
     'accent2'    : r'$\widehat{abc}\widetilde{def}$',
     'greek3'     : r'$\Gamma \Delta \Theta \Lambda \Xi \Pi \Sigma \Upsilon \Phi \Psi \Omega$',
-    'greek4'     : r'$\alpha \beta \gamma \delta \epsilon \zeta \eta \theta \iota \lambda \mu \nu \xi \pi \kappa \rho \sigma \tau \upsilon \phi \chi \psi$'
+    'greek4'     : r'$\alpha \beta \gamma \delta \epsilon \zeta \eta \theta \iota \lambda \mu \nu \xi \pi \kappa \rho \sigma \tau \upsilon \phi \chi \psi$',
+    'opname'     : r'$\operatorname{cos} x$'
 }
 
 # A list of (font size, dpi) to run each test at
