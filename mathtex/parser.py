@@ -204,12 +204,19 @@ class MathtexParser(object):
                      + (group | Error("Expected \sqrt{value}"))
                      ).setParseAction(self.sqrt).setName("sqrt")
 
+        operatorname = Group(
+                       Suppress(Literal(r"\operatorname"))
+                     + ((start_group + Regex("[A-Za-z]+") + end_group)
+                        | Error("Expected \operatorname{value}"))
+                     ).setParseAction(self.operatorname).setName("operatorname")
+
         placeable   <<(function
                      ^ (c_over_c | symbol)
                      ^ accent
                      ^ group
                      ^ frac
                      ^ sqrt
+                     ^ operatorname
                      )
 
         simple      <<(space
@@ -512,6 +519,9 @@ class MathtexParser(object):
         self.pop_state()
         hlist.function_name = toks[0]
         return hlist
+
+    def operatorname(self, s, loc, toks):
+        return self.function(s, loc, toks[0])
 
     def start_group(self, s, loc, toks):
         self.push_state()
