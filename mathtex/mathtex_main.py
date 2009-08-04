@@ -14,14 +14,16 @@ except ImportError:
 from mathtex.backends.backend_image import MathtexBackendImage
 
 # Fontsets
-from mathtex.fonts import BakomaFonts, UnicodeFonts, StixFonts
+from mathtex.fonts import BakomaFonts, UnicodeFonts, StixFonts,\
+                          StixSansFonts
 
 class Mathtex:
     fontset_mapping = {
         'bakoma'  : BakomaFonts,
         'cm'      : BakomaFonts, # Alias for Bakoma
         'unicode' : UnicodeFonts,
-        'stix'    : StixFonts
+        'stix'    : StixFonts,
+        'stixsans': StixSansFonts
         }
     _cache = {}
 

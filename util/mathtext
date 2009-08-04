@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 # Mathtex command line utility
 from mathtex.mathtex_main import Mathtex
-from mathtex.fonts import BakomaFonts, StixFonts, UnicodeFonts
+from mathtex.fonts import BakomaFonts, StixFonts, StixSansFonts, UnicodeFonts
 from optparse import OptionParser
 from tempfile import mkstemp
 import os, sys
@@ -18,8 +18,8 @@ arg_parser.add_option('-d', '--dpi', dest='dpi', type='int',
 
 # Fontset to use
 arg_parser.add_option('-f', '--fontset', dest='fontset', type='choice',
-                      choices=['bakoma', 'cm', 'stix', 'unicode'], default='cm',
-                      help='fonts to render the equation with')
+                      choices=['bakoma', 'cm', 'stix', 'stixsans', 'unicode'],
+                      default='cm', help='fonts to render the equation with')
 
 # Output format
 arg_parser.add_option('-j', '--format', dest='format', default='auto',
@@ -55,6 +55,8 @@ if options.fontset == 'bakoma' or options.fontset == 'cm':
     fonts = BakomaFonts(options.style)
 elif options.fontset == 'stix':
     fonts = StixFonts(options.style)
+elif options.fontset == 'stixsans':
+    fonts = StixSansFonts(options.style)
 elif options.fontset == 'unicode':
     # Need to parse the font list
     flatlist = options.fontlist.replace('=', ',').split(',')

@@ -530,3 +530,6 @@ class StixFonts(UnicodeFonts):
 
         self._size_alternatives[sym] = alternatives
         return alternatives
+
+class StixSansFonts(StixFonts):
+    _sans = True
