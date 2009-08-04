@@ -2,8 +2,12 @@ from mathtex.util import Bunch
 from mathtex.data import latex_to_bakoma, \
         latex_to_standard, tex2uni, latex_to_cmex, stix_virtual_fonts
 
-from mathtex.ft2font import FT2Font, KERNING_DEFAULT
 from mathtex.font_manager import findfont, FontProperties
+
+try:
+    from mathtex.ft2font import FT2Font, KERNING_DEFAULT
+except ImportError:
+    from matplotlib.ft2font import FT2Font, KERNING_DEFAULT
 
 from warnings import warn
 import unicodedata
