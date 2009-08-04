@@ -23,15 +23,23 @@ class Mathtex:
         'unicode' : UnicodeFonts,
         'stix'    : StixFonts
         }
+    _cache = {}
 
     def __init__(self, expr, fontset = 'bakoma', fontsize = 12, dpi = 100,
-                       default_style = 'it'):
+                       default_style = 'it', cache=False):
         if is_string_like(fontset):
             fontset = self.fontset_mapping[fontset](default_style)
 
+        # Hash and check the cache
+        h = hash((expr, fontset, fontsize, dpi, default_style))
+        if cache and h in self._cache:
+            self.boxmodel = self._cache[h]
         # Parse the expression
-        self.boxmodel = MathtexParser().parse(expr, fontset, fontsize,
-                                              dpi)
+        else:
+            self.boxmodel = MathtexParser().parse(expr, fontset, fontsize,
+                                                  dpi)
+            if cache:
+                self._cache[h] = self.boxmodel
 
         # Use ship to get a stream of glyphs and rectangles
         self.rects, self.glyphs, bbox = ship(0, 0, self.boxmodel)
