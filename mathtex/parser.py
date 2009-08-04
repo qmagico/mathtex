@@ -291,12 +291,9 @@ class MathtexParser(object):
         self._state_stack = [self.State(fonts_object, 'default', 'rm', fontsize, dpi)]
         try:
             self._expression.parseString(s)
-        except ParseException, err:
-            raise ValueError("\n".join([
-                        "",
-                        err.line,
-                        " " * (err.column - 1) + "^",
-                        str(err)]))
+        except (ParseException, ParseFatalException), err:
+            raise ValueError(str(err))
+
         return self._expr
 
     # The state of the parser is maintained in a stack.  Upon

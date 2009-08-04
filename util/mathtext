@@ -4,7 +4,7 @@ from mathtex.mathtex_main import Mathtex
 from mathtex.fonts import BakomaFonts, StixFonts, UnicodeFonts
 from optparse import OptionParser
 from tempfile import mkstemp
-import os
+import os, sys
 
 def print_dimensions(m):
     print '[%.2f, %.2f, %.2f]' % (m.width, m.height, m.depth)
@@ -67,9 +67,14 @@ if len(args) == 1 or len(args) == 2:
     else:
         expr = args[1]
 
-    m = Mathtex(expr, fonts, options.fontsize, options.dpi,
-                options.style)
-    m.save(args[0], options.format)
+    try:
+        m = Mathtex(expr, fonts, options.fontsize, options.dpi,
+                    options.style)
+        m.save(args[0], options.format)
+    except ValueError, err:
+        print "Parse Error:"
+        print '\t' + "\n\t".join(str(err).split('\n'))
+        sys.exit(1)
 
     if options.dim:
         print_dimensions(m)
