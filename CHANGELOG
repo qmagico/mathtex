@@ -3,6 +3,10 @@ CHANGELOG
 
   SVN HEAD
 
+  * Fix various include bugs related to FT2Font.
+  * Allow the use of sans serif STIX fonts.
+  * Add support for \operatorname. This is a popular AMS extension.
+  * Add support for caching expressions. Disabled by default.
   * Improve the rendering of functions. Feedback welcome/wanted.
 
   2009-07-31: 0.1
