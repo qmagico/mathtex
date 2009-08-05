@@ -29,11 +29,13 @@ class Mathtex:
 
     def __init__(self, expr, fontset = 'bakoma', fontsize = 12, dpi = 100,
                        default_style = 'it', cache=False):
+        # Hash the arguments
+        h = hash((expr, fontset, fontsize, dpi, default_style))
+
         if is_string_like(fontset):
             fontset = self.fontset_mapping[fontset](default_style)
 
-        # Hash and check the cache
-        h = hash((expr, fontset, fontsize, dpi, default_style))
+        # Check the cache first
         if cache and h in self._cache:
             self.boxmodel = self._cache[h]
         # Parse the expression
