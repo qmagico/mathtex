@@ -1,7 +1,7 @@
 # Main parser
 from mathtex.parser import MathtexParser
 from mathtex.boxmodel import ship
-from mathtex.util import is_string_like
+from mathtex.util import is_string_like, maxdict
 
 # Might not have Py Cairo installed
 HAVE_CAIRO_BACKEND = True
@@ -25,7 +25,7 @@ class Mathtex:
         'stix'    : StixFonts,
         'stixsans': StixSansFonts
         }
-    _cache = {}
+    _cache = maxdict(50)
 
     def __init__(self, expr, fontset = 'bakoma', fontsize = 12, dpi = 100,
                        default_style = 'it', cache=False):
