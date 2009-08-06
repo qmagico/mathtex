@@ -51,14 +51,54 @@ tests = {
     'accent2'    : r'$\widehat{abc}\widetilde{def}$',
     'greek3'     : r'$\Gamma \Delta \Theta \Lambda \Xi \Pi \Sigma \Upsilon \Phi \Psi \Omega$',
     'greek4'     : r'$\alpha \beta \gamma \delta \epsilon \zeta \eta \theta \iota \lambda \mu \nu \xi \pi \kappa \rho \sigma \tau \upsilon \phi \chi \psi$',
-    'opname'     : r'$\operatorname{cos} x$'
+    'opname'     : r'$\operatorname{cos} x$',
+
+    # The examples prefixed by 'mmltt' are from the MathML torture test here:
+    # http://www.mozilla.org/projects/mathml/demo/texvsmml.xhtml
+    'mmltt1'     : r'${x}^{2}{y}^{2}$',
+    'mmltt2'     : r'${}_{2}F_{3}$',
+    'mmltt3'     : r'$\frac{x+{y}^{2}}{k+1}$',
+    'mmltt4'     : r'$x+{y}^{\frac{2}{k+1}}$',
+    'mmltt5'     : r'$\frac{a}{b/2}$',
+    'mmltt6'     : r'${a}_{0}+\frac{1}{{a}_{1}+\frac{1}{{a}_{2}+\frac{1}{{a}_{3}+\frac{1}{{a}_{4}}}}}$',
+    'mmltt7'     : r'${a}_{0}+\frac{1}{{a}_{1}+\frac{1}{{a}_{2}+\frac{1}{{a}_{3}+\frac{1}{{a}_{4}}}}}$',
+    # mathtex doesn't support binom
+    # 'mmltt8'     : r'$\binom{n}{k/2}$',
+    # mathtex doesn't support binom
+    # 'mmltt9'     : r'$\binom{p}{2}{x}^{2}{y}^{p-2}-\frac{1}{1-x}\frac{1}{1-{x}^{2}}$',
+    # mathtex doesn't support genfrac
+    # 'mmltt10'    : r'$\sum _{\genfrac{}{}{0}{}{0\leq i\leq m}{0<j<n}}P\left(i,j\right)$',
+    'mmltt11'    : r'${x}^{2y}$',
+    'mmltt12'    : r'$\sum _{i=1}^{p}\sum _{j=1}^{q}\sum _{k=1}^{r}{a}_{ij}{b}_{jk}{c}_{ki}$',
+    'mmltt13'    : r'$\sqrt{1+\sqrt{1+\sqrt{1+\sqrt{1+\sqrt{1+\sqrt{1+\sqrt{1+x}}}}}}}$',
+    'mmltt14'    : r'$\left(\frac{{\partial }^{2}}{\partial {x}^{2}}+\frac{{\partial }^{2}}{\partial {y}^{2}}\right){|\varphi \left(x+iy\right)|}^{2}=0$',
+    'mmltt15'    : r'${2}^{{2}^{{2}^{x}}}$',
+    'mmltt16'    : r'${\int }_{1}^{x}\frac{\mathrm{dt}}{t}$',
+    'mmltt17'    : r'$\int {\int }_{D}\mathrm{dx} \mathrm{dy}$',
+    # mathtex doesn't support array
+    # 'mmltt18'    : r'$f\left(x\right)=\left\{\begin{array}{cc}\hfill 1/3\hfill & \text{if_}0\le x\le 1;\hfill \\ \hfill 2/3\hfill & \hfill \text{if_}3\le x\le 4;\hfill \\ \hfill 0\hfill & \text{elsewhere.}\hfill \end{array}$',
+    # mathtex doesn't support stackrel
+    # 'mmltt19'    : ur'$\stackrel{\stackrel{k\text{times}}{\ufe37}}{x+...+x}$',
+    'mmltt20'    : r'${y}_{{x}^{2}}$',
+    # mathtex doesn't support the "\text" command
+    # 'mmltt21'    : r'$\sum _{p\text{\prime}}f\left(p\right)={\int }_{t>1}f\left(t\right) d\pi \left(t\right)$',
+    # mathtex doesn't support array
+    # 'mmltt23'    : r'$\left(\begin{array}{cc}\hfill \left(\begin{array}{cc}\hfill a\hfill & \hfill b\hfill \\ \hfill c\hfill & \hfill d\hfill \end{array}\right)\hfill & \hfill \left(\begin{array}{cc}\hfill e\hfill & \hfill f\hfill \\ \hfill g\hfill & \hfill h\hfill \end{array}\right)\hfill \\ \hfill 0\hfill & \hfill \left(\begin{array}{cc}\hfill i\hfill & \hfill j\hfill \\ \hfill k\hfill & \hfill l\hfill \end{array}\right)\hfill \end{array}\right)$',
+    # mathtex doesn't support array
+    # 'mmltt24'   : u'$det|\\begin{array}{ccccc}\\hfill {c}_{0}\\hfill & \\hfill {c}_{1}\\hfill & \\hfill {c}_{2}\\hfill & \\hfill \\dots \\hfill & \\hfill {c}_{n}\\hfill \\\\ \\hfill {c}_{1}\\hfill & \\hfill {c}_{2}\\hfill & \\hfill {c}_{3}\\hfill & \\hfill \\dots \\hfill & \\hfill {c}_{n+1}\\hfill \\\\ \\hfill {c}_{2}\\hfill & \\hfill {c}_{3}\\hfill & \\hfill {c}_{4}\\hfill & \\hfill \\dots \\hfill & \\hfill {c}_{n+2}\\hfill \\\\ \\hfill \\u22ee\\hfill & \\hfill \\u22ee\\hfill & \\hfill \\u22ee\\hfill & \\hfill \\hfill & \\hfill \\u22ee\\hfill \\\\ \\hfill {c}_{n}\\hfill & \\hfill {c}_{n+1}\\hfill & \\hfill {c}_{n+2}\\hfill & \\hfill \\dots \\hfill & \\hfill {c}_{2n}\\hfill \\end{array}|>0$',
+    'mmltt25'    : r'${y}_{{x}_{2}}$',
+    'mmltt26'    : r'${x}_{92}^{31415}+\pi $',
+    'mmltt27'    : r'${x}_{{y}_{b}^{a}}^{{z}_{c}^{d}}$',
+    'mmltt28'    : r'${y}_{3}^{\prime \prime \prime }$'
 }
 
 # A list of (font size, dpi) to run each test at
 presets = [(10, 100, 'bakoma'), (12, 100, 'bakoma'),
            (10, 100, 'stix'), (12, 100, 'stix'),
+           (10, 100, 'stixsans'), (12, 100, 'stixsans'),
            (10, 300, 'bakoma'), (12, 300, 'bakoma'),
-           (10, 300, 'stix'), (12, 300, 'stix')]
+           (10, 300, 'stix'), (12, 300, 'stix'),
+           (10, 100, 'stixsans'), (12, 100, 'stixsans')]
 
 def extract_glyphs(glyphs):
     results = []
