@@ -92,7 +92,7 @@ tests = {
     'mmltt28'    : r'${y}_{3}^{\prime \prime \prime }$'
 }
 
-# A list of (font size, dpi) to run each test at
+# A list of (font, size, dpi) to run each test at
 presets = [(10, 100, 'bakoma'), (12, 100, 'bakoma'),
            (10, 100, 'stix'), (12, 100, 'stix'),
            (10, 100, 'stixsans'), (12, 100, 'stixsans'),
