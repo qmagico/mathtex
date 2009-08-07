@@ -528,8 +528,14 @@ class StixFonts(UnicodeFonts):
             if glyphindex is not None:
                 alternatives.append((i, unichr(uniindex)))
 
+        # The largest size of the radical symbol in STIX has incorrect
+        # metrics that cause it to be disconnected from the stem.
+        if sym == r'\__sqrt__':
+            alternatives = alternatives[:-1]
+
         self._size_alternatives[sym] = alternatives
         return alternatives
 
 class StixSansFonts(StixFonts):
     _sans = True
+
