@@ -193,6 +193,39 @@ class MathtexParser(object):
                         | Error(r"Expected \frac{num}{den}"))
                      ).setParseAction(self.frac).setName("frac")
 
+        stackrel     = Group(
+                       Suppress(Literal(r"\stackrel"))
+                     + ((group + group)
+                        | Error(r"Expected \stackrel{num}{den}"))
+                     ).setParseAction(self.stackrel).setName("stackrel")
+
+        binom        = Group(
+                       Suppress(Literal(r"\binom"))
+                     + ((group + group)
+                        | Error(r"Expected \binom{num}{den}"))
+                     ).setParseAction(self.binom).setName("binom")
+
+        ambiDelim    = oneOf(list(self._ambiDelim))
+        leftDelim    = oneOf(list(self._leftDelim))
+        rightDelim   = oneOf(list(self._rightDelim))
+        rightDelimSafe = oneOf(list(self._rightDelim - set(['}'])))
+        genfrac      = Group(
+                       Suppress(Literal(r"\genfrac"))
+                     + ((Suppress(Literal('{')) +
+                         oneOf(list(self._ambiDelim | self._leftDelim | set(['']))) +
+                         Suppress(Literal('}')) +
+                         Suppress(Literal('{')) +
+                         oneOf(list(self._ambiDelim |
+                                    (self._rightDelim - set(['}'])) |
+                                    set(['', r'\}']))) +
+                         Suppress(Literal('}')) +
+                         Suppress(Literal('{')) +
+                         Regex("[0-9]*(\.?[0-9]*)?") +
+                         Suppress(Literal('}')) +
+                         group + group + group)
+                        | Error(r"Expected \genfrac{ldelim}{rdelim}{rulesize}{style}{num}{den}"))
+                     ).setParseAction(self.genfrac).setName("genfrac")
+
         sqrt         = Group(
                        Suppress(Literal(r"\sqrt"))
                      + Optional(
@@ -215,6 +248,9 @@ class MathtexParser(object):
                      ^ accent
                      ^ group
                      ^ frac
+                     ^ stackrel
+                     ^ binom
+                     ^ genfrac
                      ^ sqrt
                      ^ operatorname
                      )
@@ -237,9 +273,6 @@ class MathtexParser(object):
                        | placeable
                      )
 
-        ambiDelim    = oneOf(list(self._ambiDelim))
-        leftDelim    = oneOf(list(self._leftDelim))
-        rightDelim   = oneOf(list(self._rightDelim))
         autoDelim   <<(Suppress(Literal(r"\left"))
                      + ((leftDelim | ambiDelim) | Error("Expected a delimiter"))
                      + Group(
@@ -679,14 +712,12 @@ class MathtexParser(object):
         result = Hlist([nucleus, x])
         return [result]
 
-    def frac(self, s, loc, toks):
-        assert(len(toks)==1)
-        assert(len(toks[0])==2)
+    def _genfrac(self, ldelim, rdelim, rule, style, num, den):
         state = self.get_state()
         thickness = state.font_output.get_underline_thickness(
             state.font, state.fontsize, state.dpi)
 
-        num, den = toks[0]
+        rule = float(rule)
         num.shrink()
         den.shrink()
         cnum = HCentered([num])
@@ -696,7 +727,7 @@ class MathtexParser(object):
         cden.hpack(width, 'exactly')
         vlist = Vlist([cnum,                      # numerator
                        Vbox(0, thickness * 2.0),  # space
-                       Hrule(state),              # rule
+                       Hrule(state, rule),        # rule
                        Vbox(0, thickness * 2.0),  # space
                        cden                       # denominator
                        ])
@@ -710,8 +741,47 @@ class MathtexParser(object):
                   thickness * 3.0))
         vlist.shift_amount = shift
 
-        hlist = Hlist([vlist, Hbox(thickness * 2.)])
-        return [hlist]
+        result = [Hlist([vlist, Hbox(thickness * 2.)])]
+        if ldelim or rdelim:
+            if ldelim == '':
+                ldelim = '.'
+            if rdelim == '':
+                rdelim = '.'
+            elif rdelim == r'\}':
+                rdelim = '}'
+            return self._auto_sized_delimiter(ldelim, result, rdelim)
+        return result
+
+    def genfrac(self, s, loc, toks):
+        assert(len(toks)==1)
+        assert(len(toks[0])==6)
+
+        return self._genfrac(*tuple(toks[0]))
+
+    def frac(self, s, loc, toks):
+        assert(len(toks)==1)
+        assert(len(toks[0])==2)
+        state = self.get_state()
+
+        thickness = state.font_output.get_underline_thickness(
+            state.font, state.fontsize, state.dpi)
+        num, den = toks[0]
+
+        return self._genfrac('', '', thickness, '', num, den)
+
+    def stackrel(self, s, loc, toks):
+        assert(len(toks)==1)
+        assert(len(toks[0])==2)
+        num, den = toks[0]
+
+        return self._genfrac('', '', 0.0, '', num, den)
+
+    def binom(self, s, loc, toks):
+        assert(len(toks)==1)
+        assert(len(toks[0])==2)
+        num, den = toks[0]
+
+        return self._genfrac('(', ')', 0.0, '', num, den)
 
     def sqrt(self, s, loc, toks):
         #~ print "sqrt", toks
@@ -754,9 +824,7 @@ class MathtexParser(object):
                        rightside])               # Body
         return [hlist]
 
-    def auto_sized_delimiter(self, s, loc, toks):
-        #~ print "auto_sized_delimiter", toks
-        front, middle, back = toks
+    def _auto_sized_delimiter(self, front, middle, back):
         state = self.get_state()
         height = max([x.height for x in middle])
         depth = max([x.depth for x in middle])
@@ -764,8 +832,14 @@ class MathtexParser(object):
         # \left. and \right. aren't supposed to produce any symbols
         if front != '.':
             parts.append(AutoHeightChar(front, height, depth, state))
-        parts.extend(middle.asList())
+        parts.extend(middle)
         if back != '.':
             parts.append(AutoHeightChar(back, height, depth, state))
         hlist = Hlist(parts)
         return hlist
+
+    def auto_sized_delimiter(self, s, loc, toks):
+        #~ print "auto_sized_delimiter", toks
+        front, middle, back = toks
+
+        return self._auto_sized_delimiter(front, middle.asList(), back)

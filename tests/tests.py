@@ -62,12 +62,9 @@ tests = {
     'mmltt5'     : r'$\frac{a}{b/2}$',
     'mmltt6'     : r'${a}_{0}+\frac{1}{{a}_{1}+\frac{1}{{a}_{2}+\frac{1}{{a}_{3}+\frac{1}{{a}_{4}}}}}$',
     'mmltt7'     : r'${a}_{0}+\frac{1}{{a}_{1}+\frac{1}{{a}_{2}+\frac{1}{{a}_{3}+\frac{1}{{a}_{4}}}}}$',
-    # mathtex doesn't support binom
-    # 'mmltt8'     : r'$\binom{n}{k/2}$',
-    # mathtex doesn't support binom
-    # 'mmltt9'     : r'$\binom{p}{2}{x}^{2}{y}^{p-2}-\frac{1}{1-x}\frac{1}{1-{x}^{2}}$',
-    # mathtex doesn't support genfrac
-    # 'mmltt10'    : r'$\sum _{\genfrac{}{}{0}{}{0\leq i\leq m}{0<j<n}}P\left(i,j\right)$',
+    'mmltt8'     : r'$\binom{n}{k/2}$',
+    'mmltt9'     : r'$\binom{p}{2}{x}^{2}{y}^{p-2}-\frac{1}{1-x}\frac{1}{1-{x}^{2}}$',
+    'mmltt10'    : r'$\sum _{\genfrac{}{}{0}{}{0\leq i\leq m}{0<j<n}}P\left(i,j\right)$',
     'mmltt11'    : r'${x}^{2y}$',
     'mmltt12'    : r'$\sum _{i=1}^{p}\sum _{j=1}^{q}\sum _{k=1}^{r}{a}_{ij}{b}_{jk}{c}_{ki}$',
     'mmltt13'    : r'$\sqrt{1+\sqrt{1+\sqrt{1+\sqrt{1+\sqrt{1+\sqrt{1+\sqrt{1+x}}}}}}}$',
