@@ -46,7 +46,8 @@ class Mathtex:
                 self._cache[h] = self.boxmodel
 
         # Use ship to get a stream of glyphs and rectangles
-        self.rects, self.glyphs, bbox = ship(0, 0, self.boxmodel)
+        bbox = ship(0, 0, self.boxmodel)[2]
+        self.rects, self.glyphs, bbox = ship(-bbox[0], 0, self.boxmodel)
 
         # Calculate the exact width, height and depth
         self.width = bbox[2] - bbox[0]
