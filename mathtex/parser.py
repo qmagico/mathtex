@@ -628,9 +628,9 @@ class MathtexParser(object):
                 hlist = HCentered([sub])
                 hlist.hpack(width, 'exactly')
                 vlist.extend([Kern(rule_thickness * 3.0), hlist])
-                shift = hlist.height + hlist.depth + rule_thickness * 2.0
+                shift = hlist.height
             vlist = Vlist(vlist)
-            vlist.shift_amount = shift + nucleus.depth * 0.5
+            vlist.shift_amount = shift + nucleus.depth
             result = Hlist([vlist])
             return [result]
 
