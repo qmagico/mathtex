@@ -29,7 +29,7 @@ SHRINK_FACTOR   = 0.7
 GROW_FACTOR     = 1.0 / SHRINK_FACTOR
 # The number of different sizes of chars to use, beyond which they will not
 # get any smaller
-NUM_SIZE_LEVELS = 4
+NUM_SIZE_LEVELS = 6
 # Percentage of x-height of additional horiz. space after sub/superscripts
 SCRIPT_SPACE    = 0.2
 # Percentage of x-height that sub/superscripts drop below the baseline
