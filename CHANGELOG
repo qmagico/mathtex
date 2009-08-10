@@ -3,6 +3,14 @@ CHANGELOG
 
   SVN HEAD
 
+  * Add support for \genfrac and \binom (issue #12).
+  * Allow for deeper nesting of fractions (issue #9).
+  * Add the sans serif STIX fonts to the unit tests.
+  * Add the MathML Torture Tests to mathtex.
+  * Various alignment issues corrected (issues #6, #10, #7).
+
+  2009-08-05: 0.2 RC 1
+
   * Fix various include bugs related to FT2Font.
   * Allow the use of sans serif STIX fonts.
   * Add support for \operatorname. This is a popular AMS extension.
