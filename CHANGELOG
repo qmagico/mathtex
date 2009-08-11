@@ -1,7 +1,7 @@
 CHANGELOG
 =========
 
-  SVN HEAD
+  2009-08-11: 0.3 RC 1
 
   * Add support for \genfrac and \binom (issue #12).
   * Allow for deeper nesting of fractions (issue #9).
