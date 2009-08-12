@@ -10,7 +10,9 @@ def print_dimensions(m):
     print '[%.2f, %.2f, %.2f]' % (m.width, m.height, m.depth)
 
 # Configure the command line argument parser
-arg_parser = OptionParser()
+arg_parser = OptionParser("""mathtex [filename] [expression]
+If no expression is provided mathtex will read one from stdin.
+If neither are provided mathtex will enter persistence mode.""")
 
 # DPI option
 arg_parser.add_option('-d', '--dpi', dest='dpi', type='int',
