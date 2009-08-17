@@ -112,8 +112,6 @@ def fuzzy_rect_cmp(rects1, rects2):
 
     for r1, r2 in zip(rects1, rects2):
         if [ceil(x) for x in r1] != [ceil(x) for x in r2]:
-            print [ceil(x) for x in r1]
-            print [ceil(x) for x in r2]
             return False
 
     return True
