@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+  2009-08-17: 0.3
+
+  * Add an example of how to use unicode fonts with mathtex.
+  * Improve the help for the command line application.
+
   2009-08-11: 0.3 RC 1
 
   * Add support for \genfrac and \binom (issue #12).

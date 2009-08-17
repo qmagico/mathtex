@@ -40,7 +40,7 @@ py_modules = []
 ext_modules = []
 
 # Mathtex version
-__version__ = '0.3rc1'
+__version__ = '0.3'
 
 print_line()
 print_raw("BUILDING MATHTEX")
