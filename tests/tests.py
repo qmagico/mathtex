@@ -95,7 +95,7 @@ presets = [(10, 100, 'bakoma'), (12, 100, 'bakoma'),
            (10, 100, 'stixsans'), (12, 100, 'stixsans'),
            (10, 300, 'bakoma'), (12, 300, 'bakoma'),
            (10, 300, 'stix'), (12, 300, 'stix'),
-           (10, 100, 'stixsans'), (12, 100, 'stixsans')]
+           (10, 300, 'stixsans'), (12, 300, 'stixsans')]
 
 def extract_glyphs(glyphs):
     results = []
