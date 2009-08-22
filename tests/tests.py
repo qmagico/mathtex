@@ -213,8 +213,10 @@ for (name, tex) in actual_tests.iteritems():
         m = Mathtex(tex, fontset=font, fontsize=fontsize, dpi=dpi)
 
         if options.gen_output:
-            m.save(os.path.join(os.path.dirname(__file__),
-                                "%s.%s.%dpt.%ddpi.png" % (name, font, fontsize, dpi)))
+            filename = "%s.%s.%dpt.%ddpi" % (name, font, fontsize, dpi)
+            if options.update:
+                filename += "-ref"
+            m.save(os.path.join(os.path.dirname(__file__), filename + ".png"))
 
         key = (name, fontsize, dpi, font)
 
