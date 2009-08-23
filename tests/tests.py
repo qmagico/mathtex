@@ -4,6 +4,7 @@ import sys, os
 from mathtex.mathtex_main import Mathtex
 from mathtex.font_manager import ttfFontProperty
 from optparse import OptionParser
+from subprocess import Popen, call, PIPE
 from hashlib import md5
 from math import ceil
 import pickle
@@ -97,6 +98,20 @@ presets = [(10, 100, 'bakoma'), (12, 100, 'bakoma'),
            (10, 300, 'stix'), (12, 300, 'stix'),
            (10, 300, 'stixsans'), (12, 300, 'stixsans')]
 
+def has_pdiff(location):
+    try:
+        Popen([location], stdout=PIPE)
+        return True
+    except OSError:
+        return False
+
+def pdiff_bitmap_cmp(pdiff, new, ref):
+    # pdiff returns 0 if they are the same, 1 otherwise
+    if call([pdiff, '-threshold', '15', new, ref], stdout=PIPE, stderr=PIPE) == 0:
+        return True
+    else:
+        return False
+
 def extract_glyphs(glyphs):
     results = []
 
@@ -167,6 +182,10 @@ arg_parser.add_option('-T', '--run-presets', dest='presets',
                       default=','.join([str(s) for s in range(0, len(presets))]),
                       help='list of preset indexes to run')
 
+# Location of the PerceptualDiff binary
+arg_parser.add_option('-p', '--pdiff', dest='pdiff', default='perceptualdiff',
+                      help='Path of the PerceptualDiff binary to use.')
+
 (options, args) = arg_parser.parse_args()
 
 # Sanity checking
@@ -186,9 +205,11 @@ elif options.list_presets:
     sys.exit()
 
 # Otherwise run the tests
+use_pdiff = has_pdiff(options.pdiff)
 glyphs = {}
 rects = {}
 bitmap = {}
+filenames = {}
 
 # See what tests we have been asked to run
 actual_tests = {}
@@ -204,21 +225,31 @@ actual_presets = [presets[int(i)] for i in options.presets.split(',')]
 total = len(actual_tests) * len(actual_presets)
 count = 0
 
+# Warn if pdiff is not available
+if not use_pdiff:
+    print "WARNING: Perceptual diff was not found, bitmap comparisons will not be performed!"
+
 for (name, tex) in actual_tests.iteritems():
     for fontsize, dpi, font in actual_presets:
         count += 1
         print "Test %d of %d ['%s' at (%.1f, %d, %s)]" % (count, total, name,
                                                           fontsize, dpi, font)
 
+        key = (name, fontsize, dpi, font)
+
         m = Mathtex(tex, fontset=font, fontsize=fontsize, dpi=dpi)
 
         if options.gen_output:
-            filename = "%s.%s.%dpt.%ddpi" % (name, font, fontsize, dpi)
-            if options.update:
-                filename += "-ref"
-            m.save(os.path.join(os.path.dirname(__file__), filename + ".png"))
+            # Generate the base file name
+            fn = os.path.join(os.path.dirname(__file__),
+                              "%s.%s.%dpt.%ddpi" % (name, font, fontsize, dpi))
+            # Produce the normal and reference file names
+            filenames[key] = (fn + '.png', fn + '-ref.png')
 
-        key = (name, fontsize, dpi, font)
+            if options.update:
+                m.save(filenames[key][1])
+            else:
+                m.save(filenames[key][0])
 
         glyphs[key] = extract_glyphs(m.glyphs)
         rects[key] = m.rects
@@ -246,8 +277,9 @@ if os.path.isfile(options.hashfile) and not options.update:
         else:
             print "Test '%s' has no reference rect data!" % (k[0])
 
-        if k in ref_bitmap:
-            if bitmap[k] != ref_bitmap[k]:
+        if k in ref_bitmap and use_pdiff:
+            if bitmap[k] != ref_bitmap[k] and \
+            not pdiff_bitmap_cmp(options.pdiff, filenames[k][0], filenames[k][1]):
                 print "Test '%s' at (%.1f, %d, %s) failed bitmap comparison!" % k
         else:
             print "Test '%s' has no reference bitmap data!" % (k[0])
