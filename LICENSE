@@ -2,6 +2,13 @@ Copyright (c) 2009 Mathtex Development Team
 
 All rights reserved.
 
+Mathtex is based off of the 'mathtext' code in matplotlib; hence is a
+derivative work thereof. A copy of the BSD style matplotlib license can be
+found in MPL_LICENSE. In compliance with terms 2 & 3 of the license a
+complete list of changes can be found in CHANGELOG. Finally the mathtex
+development team would like to thank Michael Droettboom for his work on
+mathtex.
+
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
 
